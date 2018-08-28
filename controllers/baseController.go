@@ -9,20 +9,18 @@ type BaseController struct {
 }
 
 // run before get
-/*func (this *BaseController) Prepare() {
+func (this *BaseController) Prepare() {
 	// login status
-	user := this.GetSession("username")
-	if user == nil {
+	/*login := this.GetSession("loginUser")
+	if login == nil {
 		this.Redirect("/login", 302)
 	} else {
-		// find user id
-		username := user.(string)
-		u, err := models.FindUser(username)
-		if err != nil {
-			log.Fatal(err)
-		}
+		this.Redirect("/", 200)
+	}*/
+	//this.SetSession("loginUser", "aurora")
+	loginName := this.GetSession("loginUser")
+	if loginName != nil && loginName != "" {
+		this.Data["loginName"] = loginName
 	}
-
-
-}*/
+}
 

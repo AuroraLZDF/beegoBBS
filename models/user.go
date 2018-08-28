@@ -3,7 +3,7 @@ package models
 import (
 	"time"
 	_ "github.com/go-sql-driver/mysql"
-	"log"
+	_ "github.com/auroraLZDF/beegoBBS/utils"
 )
 
 type Users struct {
@@ -26,19 +26,37 @@ func (Users) TableName() string {
 }
 
 
-func AddUser() {
+func AddUser(u Users) (bool, error) {
+	user := u
 
+	db := DB()
+	defer db.Close()
+
+	if err := db.Create(&user).Error; err != nil {
+		return false, err
+	}
+
+	return true, nil
 }
 
-func FindUserByEmail(email string) Users {
+func FindUserByFields(u Users) (bool , Users, string) {
 	db := DB()
 	defer db.Close()
 
 	user := Users{}
-	//db.First(&user, "email = ?", email)
-	if err := db.Where("email = ?", email).First(&user).Error; err != nil {
-		log.Fatal(err)
+
+	result := db.Where(u).First(&user)
+
+	if err := result.Error; err != nil {
+		//utils.ShowErr(err)
+		return false, user, err.Error()
 	}
 
-	return user
+	if result.RecordNotFound() == true {
+		//utils.ShowErr("数据不存在！")
+		return false, user, "数据不存在！"
+	}
+
+	return true, user, "用户已存在！"
 }
+

@@ -4,7 +4,7 @@ import (
 	"github.com/auroraLZDF/beegoBBS/controllers"
 	"log"
 	"github.com/auroraLZDF/beegoBBS/models"
-	"fmt"
+	"github.com/auroraLZDF/beegoBBS/utils"
 )
 
 type LoginController struct {
@@ -25,17 +25,17 @@ func (this *LoginController) Login() {
 		log.Fatal("密码不能为空")
 	}
 
-	//fmt.Println(email, password)
+	b, user, str := models.FindUserByFields(models.Users{Email:email,Password:utils.Md5(password)})
+	if b == false {
+		utils.ShowErr(str)
+	}
 
-	user := models.FindUserByEmail(email)
-	/*uid := user.Id
-	if (int(uid) != 0) {
-		log.Fatal("err")
-	}*/
-	//os.Exit(1)
-	fmt.Println(user)
+	this.SetSession("loginUser", user.Email)
+
+	this.Redirect("/", 302)
 }
 
 func (this *LoginController) Logout() {
-
+	this.DelSession("loginUser")
+	this.Redirect("/login", 302)
 }
