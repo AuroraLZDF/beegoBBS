@@ -8,6 +8,8 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"os"
+	"encoding/base64"
+	"encoding/json"
 )
 
 func Configs() interface{} {
@@ -18,20 +20,6 @@ func Configs() interface{} {
 	}
 
 	return Config
-}
-
-// 检测登录状态
-func CheckCk() bool {
-	/*var ctx *context.Context
-	_, ok := ctx.Input.Session("uid").(int)
-
-	if !ok && ctx.Request.RequestURI != "/login" {
-		//ctx.Redirect(302, "/login")
-		return false
-	}*/
-
-	return false
-	return true
 }
 
 func Csrf_token() string {
@@ -62,4 +50,48 @@ func Md5(str string) string {
 	result := fmt.Sprintf("%s\n", hex.EncodeToString(cipherStr)) // 输出加密结果
 
 	return result
+}
+
+/**
+ * str : json string
+ */
+func AuthCode(str string, flag string) string {
+	key := beego.AppConfig.String("app_secret")
+
+	if flag == "DECODE" {
+		decoded, _ := base64.StdEncoding.DecodeString(str)
+		decodeStr := string(decoded)
+
+		return decodeStr
+	}
+
+	res := JsonToMap(str)
+	res["sign"] = Md5(str + key)
+	_str := MapToJson(res)
+
+	strBytes := []byte(_str)
+	encodedStr := base64.StdEncoding.EncodeToString(strBytes)
+
+	return encodedStr
+}
+
+func MapToJson(m map[string]interface{}) string {
+	js, err := json.Marshal(m)
+
+	if err != nil {
+		fmt.Println("json.Marshal failed:", err)
+		return ""
+	}
+
+	return string(js)
+}
+
+func JsonToMap(jsonStr string) map[string]interface{} {
+	var mapResult map[string]interface{}
+
+	if err := json.Unmarshal([]byte(jsonStr), &mapResult); err != nil {
+		fmt.Println("json.Unmarshal failed:", err)
+	}
+
+	return  mapResult
 }

@@ -1,9 +1,9 @@
 package auth
 
 import (
-	"github.com/auroraLZDF/beegoBBS/controllers"
 	"github.com/auroraLZDF/beegoBBS/utils"
 	"github.com/auroraLZDF/beegoBBS/models"
+	"github.com/auroraLZDF/beegoBBS/controllers"
 )
 
 type RegisterController struct {
@@ -55,7 +55,17 @@ func (this *RegisterController) Register() {
 		utils.ShowErr(err)
 	}
 
-	this.SetSession("loginUser", user.Email)
+	_, res, _ := models.FindUserByFields(user)
+
+	uInfo := map[string]interface{}{
+		"id": res.Id,
+		"name": res.Name,
+		"email": res.Email,
+		"password": res.Password,
+	}
+	js := utils.MapToJson(uInfo)
+
+	this.SetSession("uInfo", utils.AuthCode(js, "encode"))
 
 	this.Redirect("/", 302)
 }

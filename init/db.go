@@ -3,9 +3,6 @@ package init
 import (
 	"github.com/astaxie/beego"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/jinzhu/gorm"
-	"fmt"
-	"log"
 )
 
 var cfg = beego.AppConfig
@@ -34,24 +31,3 @@ var cfg = beego.AppConfig
 	//RegisterModelWithPrefix
 	//orm.RegisterModelWithPrefix("bbs_", new(models.Users))
 }*/
-
-func DB() *gorm.DB {
-	// database
-	dbUser := cfg.String("mysql_user")
-	dbPass := cfg.String("mysql_pass")
-	dbHost := cfg.String("mysql_host")
-	dbPort := cfg.String("mysql_port")
-	dbName := cfg.String("mysql_db")
-	//maxIdleConn, _ := cfg.Int("db_max_idle_conn")
-	//maxOpenConn, _ := cfg.Int("db_max_open_conn")
-	dbLink := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8", dbUser, dbPass, dbHost, dbPort, dbName) + "&loc=Asia%2FShanghai"
-
-	//db, err := gorm.Open("mysql", "user:password@/dbname?charset=utf8&parseTime=True&loc=Local")
-	db, err := gorm.Open("mysql", dbLink)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	//defer db.Close()
-	return db
-}

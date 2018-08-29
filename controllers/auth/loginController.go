@@ -1,10 +1,10 @@
 package auth
 
 import (
-	"github.com/auroraLZDF/beegoBBS/controllers"
 	"log"
 	"github.com/auroraLZDF/beegoBBS/models"
 	"github.com/auroraLZDF/beegoBBS/utils"
+	"github.com/auroraLZDF/beegoBBS/controllers"
 )
 
 type LoginController struct {
@@ -30,12 +30,19 @@ func (this *LoginController) Login() {
 		utils.ShowErr(str)
 	}
 
-	this.SetSession("loginUser", user.Email)
+	uInfo := map[string]interface{}{
+		"id": user.Id,
+		"name": user.Name,
+		"email": user.Email,
+		"password": user.Password,
+	}
+	js := utils.MapToJson(uInfo)
 
+	this.SetSession("uInfo", utils.AuthCode(js, "encode"))
 	this.Redirect("/", 302)
 }
 
 func (this *LoginController) Logout() {
-	this.DelSession("loginUser")
+	this.DelSession("uInfo")
 	this.Redirect("/login", 302)
 }

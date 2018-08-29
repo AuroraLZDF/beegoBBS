@@ -39,6 +39,16 @@ func AddUser(u Users) (bool, error) {
 	return true, nil
 }
 
+func LastUser() Users {
+	db := DB()
+	defer db.Close()
+
+	user := Users{}
+	db.Last(&user)
+
+	return user
+}
+
 func FindUserByFields(u Users) (bool , Users, string) {
 	db := DB()
 	defer db.Close()
