@@ -6,15 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- CSRF Token -->
-        <meta name="csrf-token" content="{{{ .token }}}">
+    <meta name="_xsrf" content="{{{ .xsrf_token }}}" />
 
 <title>{{{ config.title }}}</title>
     <link rel="icon" href="/static/images/favicon.ico">
 
     <!-- Styles -->
-{{{ "static/css/index.css" | assets_css }}}
+{{{ "/static/css/index.css" | assets_css }}}
 </head>
 <body>
+        <!-- 全局弹层 -->
+
+        <!-- 全局弹层 -->
 
 <nav class="navbar navbar-default navbar-static-top">
 <div class="container">

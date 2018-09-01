@@ -4,6 +4,7 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/auroraLZDF/beegoBBS/utils"
 	"github.com/auroraLZDF/beegoBBS/models"
+	"html/template"
 )
 
 type BaseController struct {
@@ -12,8 +13,12 @@ type BaseController struct {
 
 // run before get
 func (this *BaseController) Prepare() {
+	// XSRF
+	this.XSRFExpire = 7200
+	this.Data["xsrf_html"] = template.HTML(this.XSRFFormHTML())
+	this.Data["xsrf_token"] = this.XSRFToken()
 
-	if res := this.CheckCk();res != nil {
+	if res := this.CheckCk(); res != nil {
 		this.Data["uInfo"] = res
 	}
 }
@@ -31,10 +36,10 @@ func (this *BaseController) CheckCk() map[string]interface{} {
 
 		user := models.Users{
 			//Id: m["id"].(int),
-			Id:  id,
-			Name:m["name"].(string),
-			Email:m["email"].(string),
-			Password:m["password"].(string),
+			Id:       id,
+			Name:     m["name"].(string),
+			Email:    m["email"].(string),
+			Password: m["password"].(string),
 		}
 		if b, _, err := models.FindUserByFields(user); b == false {
 			utils.ShowErr(err)
@@ -44,4 +49,15 @@ func (this *BaseController) CheckCk() map[string]interface{} {
 	}
 
 	return nil
+}
+
+func (this *BaseController) JsonMessage(code int, msg string, data map[string]interface{}) {
+	result := map[string]interface{}{
+		"code": code,
+		"msg":  msg,
+		"data": data,
+	}
+
+	this.Data["json"] = result
+	this.ServeJSON()
 }

@@ -10,7 +10,11 @@ import (
 	"os"
 	"encoding/base64"
 	"encoding/json"
+	"strings"
+	"net/smtp"
 )
+
+var cfg = beego.AppConfig
 
 func Configs() interface{} {
 	var Config = map[string]string{
@@ -93,5 +97,27 @@ func JsonToMap(jsonStr string) map[string]interface{} {
 		fmt.Println("json.Unmarshal failed:", err)
 	}
 
-	return  mapResult
+	return mapResult
+}
+
+func SendMail(to, subject, body, mailType string) error {
+	user := cfg.String("mail_username")
+	password := cfg.String("mail_password")
+	host := cfg.String("mail_host")
+	port := cfg.String("mail_port")
+
+	auth := smtp.PlainAuth("", user, password, host)
+
+	var contentType string
+	if mailType == "html" {
+		contentType = "Content-Type: text/html" + "; charset=UTF-8"
+	} else {
+		contentType = "Content-Type: text/plain" + "; charset=UTF-8"
+	}
+
+	msg := []byte("To: " + to + "\r\nFrom: " + user + "<" + user + ">\r\nSubject: " + subject + "\r\n" + contentType + "\r\n\r\n" + body)
+	sendTo := strings.Split(to, ";")
+	err := smtp.SendMail(host + ":" + port, auth, user, sendTo, msg)
+
+	return err
 }
