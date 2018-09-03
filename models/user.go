@@ -13,7 +13,7 @@ type Users struct {
 	Password           string
 	Avatar             string
 	Introduction       string
-	RememberToken     string
+	RememberToken      string	`gorm:column:remember_token`
 	NotificationCount int
 	CreatedAt         time.Time
 	UpdatedAt         time.Time
@@ -64,9 +64,22 @@ func FindUserByFields(u Users) (bool , Users, string) {
 
 	if result.RecordNotFound() == true {
 		//utils.ShowErr("数据不存在！")
-		return false, user, "数据不存在！"
+		return false, user, "用户不存在！"
 	}
 
 	return true, user, "用户已存在！"
+}
+
+func UpdateUserByEmail(email string, u Users) (bool, error) {
+	db := DB()
+	defer db.Close()
+
+	user := Users{}
+
+	if err := db.Model(&user).Where("email=?", email).Updates(u).Error; err != nil {
+		return false, err
+	}
+
+	return true, nil
 }
 

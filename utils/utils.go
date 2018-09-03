@@ -10,8 +10,8 @@ import (
 	"os"
 	"encoding/base64"
 	"encoding/json"
-	"strings"
 	"net/smtp"
+	"strings"
 )
 
 var cfg = beego.AppConfig
@@ -51,7 +51,7 @@ func Md5(str string) string {
 	h.Write([]byte(str)) // 需要加密的字符串
 	cipherStr := h.Sum(nil)
 	fmt.Println(cipherStr)
-	result := fmt.Sprintf("%s\n", hex.EncodeToString(cipherStr)) // 输出加密结果
+	result := fmt.Sprintf("%s", hex.EncodeToString(cipherStr)) // 输出加密结果
 
 	return result
 }
@@ -79,6 +79,9 @@ func AuthCode(str string, flag string) string {
 	return encodedStr
 }
 
+/**
+ * map 转 json
+ */
 func MapToJson(m map[string]interface{}) string {
 	js, err := json.Marshal(m)
 
@@ -90,6 +93,9 @@ func MapToJson(m map[string]interface{}) string {
 	return string(js)
 }
 
+/**
+ * json 转 map
+ */
 func JsonToMap(jsonStr string) map[string]interface{} {
 	var mapResult map[string]interface{}
 
@@ -100,6 +106,9 @@ func JsonToMap(jsonStr string) map[string]interface{} {
 	return mapResult
 }
 
+/**
+ * 发送邮件
+ */
 func SendMail(to, subject, body, mailType string) error {
 	user := cfg.String("mail_username")
 	password := cfg.String("mail_password")
@@ -120,4 +129,11 @@ func SendMail(to, subject, body, mailType string) error {
 	err := smtp.SendMail(host + ":" + port, auth, user, sendTo, msg)
 
 	return err
+}
+
+// 去除空格
+func TrimS(str string) string {
+	str = strings.Replace(str, " ", "", -1)
+	str = strings.Replace(str, "\n", "", -1)
+	return str
 }
