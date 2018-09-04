@@ -5,6 +5,8 @@ import (
 	"github.com/auroraLZDF/beegoBBS/utils"
 	"github.com/auroraLZDF/beegoBBS/models"
 	"html/template"
+	"log"
+	"time"
 )
 
 type BaseController struct {
@@ -28,24 +30,25 @@ func (this *BaseController) CheckCk() map[string]interface{} {
 
 	if uInfo != nil && uInfo != "" {
 		js := utils.AuthCode(uInfo.(string), "DECODE")
-		m := utils.JsonToMap(js)
+		uMap := utils.JsonToMap(js)
 
 		// Golang 使用 JSON unmarshal 数字到 interface{} 数字变成 float64 类型
 		// 将 “id” 键申明为 float64 类型，再转换为 int 型
-		id := int(m["id"].(float64))
+		id := int(uMap["id"].(float64))
 
 		user := models.Users{
 			//Id: m["id"].(int),
 			Id:       id,
-			Name:     m["name"].(string),
-			Email:    m["email"].(string),
-			Password: m["password"].(string),
+			Name:     uMap["name"].(string),
+			Email:    uMap["email"].(string),
+			Password: uMap["password"].(string),
 		}
 		if b, _, err := models.FindUserByFields(user); b == false {
-			utils.ShowErr(err)
+			log.Fatal("ERROR | ", time.Now().Format("2006-01-02 15:04:05"), " | ", err)
+			return nil
 		}
 
-		return m
+		return uMap
 	}
 
 	return nil
@@ -61,4 +64,8 @@ func (this *BaseController) JsonMessage(code int, msg string, data map[string]in
 	this.Data["json"] = result
 	this.ServeJSON()
 	return
+}
+
+func (this *BaseController) ShowError(err string) {
+	this.Ctx.WriteString(err)
 }

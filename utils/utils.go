@@ -2,16 +2,16 @@ package utils
 
 import (
 	"github.com/astaxie/beego"
-	"math/rand"
 	"fmt"
 	"time"
 	"crypto/md5"
 	"encoding/hex"
-	"os"
 	"encoding/base64"
 	"encoding/json"
 	"net/smtp"
 	"strings"
+	_ "context"
+	"os"
 )
 
 var cfg = beego.AppConfig
@@ -24,21 +24,6 @@ func Configs() interface{} {
 	}
 
 	return Config
-}
-
-func Csrf_token() string {
-	return GetRandomString(40)
-}
-
-func GetRandomString(length int) string {
-	str := "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-
-	result := make([]byte, length)
-	for i := range result {
-		result[i] = str[rand.Intn(len(str))]
-	}
-	fmt.Println("1111", result, string(result))
-	return string(result)
 }
 
 func ShowErr(err interface{}) {

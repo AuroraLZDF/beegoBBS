@@ -1,20 +1,13 @@
 package auth
 
 import (
-	"github.com/auroraLZDF/beegoBBS/controllers"
 	"github.com/auroraLZDF/beegoBBS/models"
 	"github.com/auroraLZDF/beegoBBS/utils"
 	"github.com/astaxie/beego"
 )
 
 type PasswordController struct {
-	controllers.BaseController
-}
-
-var data = make(map[string]interface{})
-
-func (this *PasswordController) ShowLinkRequestForm() {
-	this.TplName = "web/auth/password/reset.html"
+	Controller
 }
 
 func (this *PasswordController) Forget() {
@@ -24,6 +17,9 @@ func (this *PasswordController) Forget() {
 func (this *PasswordController) SendResetLinkEmail() {
 
 	email := this.GetString("email")
+	if b, err := utils.Required(email); b == false {
+		this.JsonMessage(2, err.Error(), data)
+	}
 
 	b, res, _ := models.FindUserByFields(models.Users{Email: email})
 	if b == false {
@@ -45,15 +41,16 @@ func (this *PasswordController) SendResetLinkEmail() {
 
 	// 邮件发送成功，通知前台
 	msg := "重置密码邮件发送成功，请在 10 分钟内完成修改密码操作！"
-	data = map[string]interface{}{
-		"token": token,
-		"url":   "/",
-	}
+	data["token"] = token
+	data["url"] = "/"
 	this.JsonMessage(1, msg, data)
 }
 
 func (this *PasswordController) ShowResetForm() {
 	token := this.Ctx.Input.Param(":token")
+	if b, err := utils.Required(token); b == false {
+		this.JsonMessage(2, err.Error(), data)
+	}
 
 	b, user, err := models.FindUserByFields(models.Users{RememberToken: token})
 	if b == false {
@@ -63,9 +60,40 @@ func (this *PasswordController) ShowResetForm() {
 	email := user.Email
 
 	this.Data["email"] = email
+	this.Data["token"] = token
 	this.TplName = "web/auth/password/reset.html"
 }
 
 func (this *PasswordController) Reset() {
+	token := this.GetString("token")
+	email := this.GetString("email")
+	password := this.GetString("password")
+	password_confirmation := this.GetString("password_confirmation")
 
+	if _, err := utils.IsEmail(email); err != nil {
+		this.JsonMessage(2, err.Error(), data)
+	}
+
+	if _, err := utils.Required(token); err != nil {
+		this.JsonMessage(2, err.Error(), data)
+	}
+
+	if _, err := utils.Required(password); err != nil {
+		this.JsonMessage(2, err.Error(), data)
+	}
+
+	if _, err := utils.Required(password_confirmation); err != nil {
+		this.JsonMessage(2, err.Error(), data)
+	}
+
+	if b, err := utils.Equal(password, password_confirmation); b == false {
+		this.JsonMessage(2, err, data)
+	}
+
+	if b, err := models.UpdateUserByEmail(email, models.Users{RememberToken: "", Password: utils.Md5(password)}); b == false {
+		this.JsonMessage(2, err.Error(), data)
+	}
+
+	data["url"] = "/"
+	this.JsonMessage(1, "修改密码成功！", data)
 }

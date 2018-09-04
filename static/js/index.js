@@ -5,7 +5,6 @@ $('.dropdown').click(function () {
 });
 
 $('.formAjax').submit(function () {
-    var _this = this;
     var method = $(this).attr('method');
     var action = $(this).attr('action');
 

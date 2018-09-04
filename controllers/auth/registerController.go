@@ -3,11 +3,10 @@ package auth
 import (
 	"github.com/auroraLZDF/beegoBBS/utils"
 	"github.com/auroraLZDF/beegoBBS/models"
-	"github.com/auroraLZDF/beegoBBS/controllers"
 )
 
 type RegisterController struct {
-	controllers.BaseController
+	Controller
 }
 
 func (this *RegisterController) RegisterForm() {
@@ -21,28 +20,28 @@ func (this *RegisterController) Register() {
 	passwordConfirmation := this.GetString("password_confirmation")
 
 	if _, err := utils.Required(name); err != nil {
-		utils.ShowErr(err)
+		this.JsonMessage(2, err.Error(), data)
 	}
 
 	if _, err := utils.Required(password); err != nil {
-		utils.ShowErr(err)
+		this.JsonMessage(2, err.Error(), data)
 	}
 
 	if _, err := utils.Required(passwordConfirmation); err != nil {
-		utils.ShowErr(err)
+		this.JsonMessage(2, err.Error(), data)
 	}
 
 	if b, str := utils.Equal(password, passwordConfirmation); b == false {
-		utils.ShowErr(str)
+		this.JsonMessage(2, str, data)
 	}
 
 	if _, err := utils.IsEmail(email); err != nil {
-		utils.ShowErr(err)
+		this.JsonMessage(2, err.Error(), data)
 	}
 
 
 	if b, _, err := models.FindUserByFields(models.Users{Email: email}); b == true {
-		utils.ShowErr(err)
+		this.JsonMessage(2, err, data)
 	}
 
 	user := models.Users{
@@ -52,7 +51,7 @@ func (this *RegisterController) Register() {
 		RememberToken: utils.Md5(password + email),
 	}
 	if res, err := models.AddUser(user); res == false {
-		utils.ShowErr(err)
+		this.JsonMessage(2, err.Error(), data)
 	}
 
 	_, res, _ := models.FindUserByFields(user)
@@ -67,5 +66,6 @@ func (this *RegisterController) Register() {
 
 	this.SetSession("uInfo", utils.AuthCode(js, "encode"))
 
-	this.Redirect("/", 302)
+	data["url"] = "/"
+	this.JsonMessage(1, "注册成功！", data)
 }

@@ -5,9 +5,9 @@ type AuthController struct {
 }
 
 // run before get
-func (this *AuthController) Prepare()  {
+func (this *AuthController) Prepare() {
 
-	if res := this.CheckCk();res != nil {
+	if res := this.CheckCk(); res != nil {
 		this.Data["uInfo"] = res
 		return
 	}
