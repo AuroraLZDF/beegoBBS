@@ -63,7 +63,6 @@ func (this *BaseController) JsonMessage(code int, msg string, data map[string]in
 
 	this.Data["json"] = result
 	this.ServeJSON()
-	return
 }
 
 func (this *BaseController) ShowError(err string) {

@@ -41,15 +41,15 @@
                             </div>
                         </div>
 
-                        <!-- <div class="form-group">
+                        <div class="form-group">
                             <label for="captcha" class="col-md-4 control-label">验证码</label>
 
-                            <div class="col-md-6">
-                                <input id="captcha" class="form-control" name="captcha" >
-
-                                <img class="thumbnail captcha" src="{{ captcha_src('flat') }}" onclick="this.src='/captcha/flat?'+Math.random()" title="点击图片重新获取验证码">
+                            <div class="col-md-6" style="text-align: center;">
+                                <input  class="form-control" name="captcha" value="" >
+                                <input id="captchaId" type="hidden" name="captchaId" value="{{{ .CaptchaId }}}" >
+                                <img id="captcha" class="thumbnail captcha" src="/captcha/{{{ .CaptchaId }}}.png" onclick="captchaReload()" title="点击图片重新获取验证码">
                             </div>
-                        </div> -->
+                        </div>
 
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">

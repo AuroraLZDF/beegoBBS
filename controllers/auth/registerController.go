@@ -3,6 +3,7 @@ package auth
 import (
 	"github.com/auroraLZDF/beegoBBS/utils"
 	"github.com/auroraLZDF/beegoBBS/models"
+	"github.com/dchest/captcha"
 )
 
 type RegisterController struct {
@@ -10,6 +11,9 @@ type RegisterController struct {
 }
 
 func (this *RegisterController) RegisterForm() {
+	CaptchaId := captcha.NewLen(6)
+
+	this.Data["CaptchaId"] = CaptchaId
 	this.TplName = "web/auth/register.html"
 }
 
@@ -21,27 +25,39 @@ func (this *RegisterController) Register() {
 
 	if _, err := utils.Required(name); err != nil {
 		this.JsonMessage(2, err.Error(), data)
+		return
 	}
 
 	if _, err := utils.Required(password); err != nil {
 		this.JsonMessage(2, err.Error(), data)
+		return
 	}
 
 	if _, err := utils.Required(passwordConfirmation); err != nil {
 		this.JsonMessage(2, err.Error(), data)
+		return
 	}
 
 	if b, str := utils.Equal(password, passwordConfirmation); b == false {
 		this.JsonMessage(2, str, data)
+		return
 	}
 
 	if _, err := utils.IsEmail(email); err != nil {
 		this.JsonMessage(2, err.Error(), data)
+		return
 	}
 
+	captchaId := this.GetString("captchaId")
+	captchaValue := this.GetString("captcha")
+	if !captcha.VerifyString(captchaId, captchaValue) {
+		this.JsonMessage(2, "请填写正确的验证码", data)
+		return
+	}
 
 	if b, _, err := models.FindUserByFields(models.Users{Email: email}); b == true {
 		this.JsonMessage(2, err, data)
+		return
 	}
 
 	user := models.Users{
@@ -52,6 +68,7 @@ func (this *RegisterController) Register() {
 	}
 	if res, err := models.AddUser(user); res == false {
 		this.JsonMessage(2, err.Error(), data)
+		return
 	}
 
 	_, res, _ := models.FindUserByFields(user)
@@ -68,4 +85,5 @@ func (this *RegisterController) Register() {
 
 	data["url"] = "/"
 	this.JsonMessage(1, "注册成功！", data)
+	return
 }

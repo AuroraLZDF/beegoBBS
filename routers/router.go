@@ -4,6 +4,7 @@ import (
 	"github.com/auroraLZDF/beegoBBS/controllers"
 	"github.com/astaxie/beego"
 	"github.com/auroraLZDF/beegoBBS/controllers/auth"
+	"github.com/dchest/captcha"
 )
 
 func init() {
@@ -25,4 +26,6 @@ func init() {
 	beego.Router("/password/reset", &auth.PasswordController{}, "post:Reset")
 
 	/** auth end **/
+
+	beego.Handler("/captcha/*.png", captcha.Server(240, 80))
 }

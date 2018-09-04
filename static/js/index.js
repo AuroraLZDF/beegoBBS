@@ -53,3 +53,22 @@ $('.formAjax').submit(function () {
     return false;   // 禁止默认 submit 事件
 });
 
+/**
+ * 刷新验证码
+ */
+function captchaReload() {
+    var elem = document.getElementById('captcha');
+    var q = "reload=" + (new Date()).getTime();
+
+    var src = elem.src;
+    var p = src.indexOf('?');
+
+    if (p >= 0) {
+        src = src.substr(0, p);
+    }
+
+    elem.src = src + "?" + q;
+
+    return false;
+}
+
