@@ -5,6 +5,7 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/auroraLZDF/beegoBBS/controllers/auth"
 	"github.com/dchest/captcha"
+	"github.com/auroraLZDF/beegoBBS/controllers/web"
 )
 
 func init() {
@@ -27,5 +28,11 @@ func init() {
 
 	/** auth end **/
 
+	// user center
+	beego.Router("/user/:id", &web.UserController{},"get:Show")
+	beego.Router("/user/edit/:id", &web.UserController{},"get:Edit")
+	beego.Router("/user/save", &web.UserController{},"post:Update")
+
+	// 验证码
 	beego.Handler("/captcha/*.png", captcha.Server(240, 80))
 }

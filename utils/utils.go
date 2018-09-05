@@ -12,6 +12,7 @@ import (
 	"strings"
 	_ "context"
 	"os"
+	"reflect"
 )
 
 var cfg = beego.AppConfig
@@ -65,21 +66,21 @@ func AuthCode(str string, flag string) string {
 }
 
 /**
- * map 转 json
+ * map to json
  */
-func MapToJson(m map[string]interface{}) string {
-	js, err := json.Marshal(m)
+func MapToJson(obj map[string]interface{}) string {
+	jsonBytes, err := json.Marshal(obj)
 
 	if err != nil {
 		fmt.Println("json.Marshal failed:", err)
 		return ""
 	}
 
-	return string(js)
+	return string(jsonBytes)
 }
 
 /**
- * json 转 map
+ * json to map
  */
 func JsonToMap(jsonStr string) map[string]interface{} {
 	var mapResult map[string]interface{}
@@ -89,6 +90,48 @@ func JsonToMap(jsonStr string) map[string]interface{} {
 	}
 
 	return mapResult
+}
+
+/**
+ * struct to json
+ */
+func StructToJson(obj interface{}) string {
+	jsonBytes, err := json.Marshal(obj)
+
+	if err != nil {
+		fmt.Println("json.Marshal failed:", err)
+	}
+
+	return string(jsonBytes)
+}
+
+/**
+ * json to struct
+ */
+/*func JsonToStruct(jsonStr string) interface{} {
+	type structResult struct{
+
+	}
+
+	if err := json.Unmarshal([]byte(jsonStr), &structResult); err != nil {
+		fmt.Println("json.Unmarshal failed:", err)
+	}
+
+	return structResult
+}*/
+
+/**
+ * struct to map
+ */
+func StructToMap(obj interface{}) map[string]interface{} {
+	t := reflect.TypeOf(obj)
+	v := reflect.ValueOf(obj)
+
+	var data = make(map[string]interface{})
+	for i := 0; i < t.NumField(); i++ {
+		data[t.Field(i).Name] = v.Field(i).Interface()
+	}
+	return data
 }
 
 /**
@@ -111,7 +154,7 @@ func SendMail(to, subject, body, mailType string) error {
 
 	msg := []byte("To: " + to + "\r\nFrom: " + user + "<" + user + ">\r\nSubject: " + subject + "\r\n" + contentType + "\r\n\r\n" + body)
 	sendTo := strings.Split(to, ";")
-	err := smtp.SendMail(host + ":" + port, auth, user, sendTo, msg)
+	err := smtp.SendMail(host+":"+port, auth, user, sendTo, msg)
 
 	return err
 }

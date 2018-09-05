@@ -1,0 +1,37 @@
+
+{{{ template "web/layouts/header.html" . }}}
+<div class="container">
+    <div class="panel panel-default col-md-10 col-md-offset-1">
+        <div class="panel-heading">
+            <h4>
+                <i class="glyphicon glyphicon-edit"></i> 编辑个人资料
+            </h4>
+        </div>
+
+    <div class="panel-body">
+
+            <form action="/user/save" method="POST" accept-charset="UTF-8">
+{{{ .xsrf_html }}}
+
+    <div class="form-group">
+        <label for="name-field">用户名</label>
+            <input class="form-control" type="text" name="name" id="name-field" value="{{{ .user.Name }}}" />
+    </div>
+    <div class="form-group">
+        <label for="email-field">邮 箱</label>
+            <input class="form-control" type="text" name="email" id="email-field" value="{{{ .user.Email }}}" />
+    </div>
+    <div class="form-group">
+        <label for="introduction-field">个人简介</label>
+    <textarea name="introduction" id="introduction-field" class="form-control" rows="3">{{{ .user.Introduction }}}</textarea>
+    </div>
+        <div class="well well-sm">
+            <button type="submit" class="btn btn-primary">保存</button>
+        </div>
+    </form>
+    </div>
+    </div>
+</div>
+
+
+{{{ template "web/layouts/footer.html" .}}}
