@@ -16,27 +16,43 @@ func _validate(str string, validator string) error {
 	return nil
 }
 
-func Required(str string) (bool, error) {
+func Required(str string) error {
 	if err := _validate(str, "required"); err != nil {
-		return false, err
+		return err
 	}
 
-	return true, nil
+	return nil
 }
 
-func IsEmail(email string) (bool, error) {
+func IsEmail(email string) error {
 	if err := _validate(email, "required,email"); err != nil {
-		return false, err
+		return err
 	}
 
-	return true, nil
+	return nil
 }
 
-func Equal(str1 string, str2 string) (bool, string) {
+func Equal(str1 string, str2 string) error {
+	if err := Required(str1); err != nil {
+		return err
+	}
+
+	if err := Required(str2); err != nil {
+		return err
+	}
 
 	if str1 != str2 {
-		return false, "两次输入不一致"
+		err := Error("两次输入不一致")
+		return err
 	}
 
-	return true, ""
+	return nil
+}
+
+func URL(url string) error {
+	if err := _validate(url, "required,url"); err != nil {
+		return err
+	}
+
+	return nil
 }

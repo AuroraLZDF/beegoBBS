@@ -17,13 +17,13 @@ func (this *PasswordController) Forget() {
 func (this *PasswordController) SendResetLinkEmail() {
 
 	email := this.GetString("email")
-	if b, err := utils.Required(email); b == false {
+	if err := utils.IsEmail(email); err != nil {
 		this.JsonMessage(2, err.Error(), data)
 		return
 	}
 
-	b, res, _ := models.FindUserByFields(models.Users{Email: email})
-	if b == false {
+	res, err := models.FindUserByFields(models.Users{Email: email})
+	if err != nil {
 		this.JsonMessage(2, "该邮箱未被注册", data)
 		return
 	}
@@ -31,7 +31,7 @@ func (this *PasswordController) SendResetLinkEmail() {
 	// 发送邮件
 	token := utils.Md5(res.Email + res.Password)
 
-	if b, err := models.UpdateUserByEmail(email, models.Users{RememberToken: utils.TrimS(token)}); b == false {
+	if err := models.UpdateUserByEmail(email, models.Users{RememberToken: utils.TrimS(token)}); err != nil {
 		this.JsonMessage(2, err.Error(), data)
 		return
 	}
@@ -53,14 +53,14 @@ func (this *PasswordController) SendResetLinkEmail() {
 
 func (this *PasswordController) ShowResetForm() {
 	token := this.Ctx.Input.Param(":token")
-	if b, err := utils.Required(token); b == false {
+	if err := utils.Required(token); err != nil {
 		this.JsonMessage(2, err.Error(), data)
 		return
 	}
 
-	b, user, err := models.FindUserByFields(models.Users{RememberToken: token})
-	if b == false {
-		this.JsonMessage(2, err, data)
+	user, err := models.FindUserByFields(models.Users{RememberToken: token})
+	if err != nil {
+		this.JsonMessage(2, err.Error(), data)
 		return
 	}
 
@@ -77,32 +77,22 @@ func (this *PasswordController) Reset() {
 	password := this.GetString("password")
 	password_confirmation := this.GetString("password_confirmation")
 
-	if _, err := utils.IsEmail(email); err != nil {
+	if err := utils.IsEmail(email); err != nil {
 		this.JsonMessage(2, err.Error(), data)
 		return
 	}
 
-	if _, err := utils.Required(token); err != nil {
+	if err := utils.Required(token); err != nil {
 		this.JsonMessage(2, err.Error(), data)
 		return
 	}
 
-	if _, err := utils.Required(password); err != nil {
+	if err := utils.Equal(password, password_confirmation); err != nil {
 		this.JsonMessage(2, err.Error(), data)
 		return
 	}
 
-	if _, err := utils.Required(password_confirmation); err != nil {
-		this.JsonMessage(2, err.Error(), data)
-		return
-	}
-
-	if b, err := utils.Equal(password, password_confirmation); b == false {
-		this.JsonMessage(2, err, data)
-		return
-	}
-
-	if b, err := models.UpdateUserByEmail(email, models.Users{RememberToken: "", Password: utils.Md5(password)}); b == false {
+	if err := models.UpdateUserByEmail(email, models.Users{RememberToken: "", Password: utils.Md5(password)}); err != nil {
 		this.JsonMessage(2, err.Error(), data)
 		return
 	}

@@ -13,6 +13,8 @@ import (
 	_ "context"
 	"os"
 	"reflect"
+	"errors"
+	"strconv"
 )
 
 var cfg = beego.AppConfig
@@ -66,6 +68,13 @@ func AuthCode(str string, flag string) string {
 }
 
 /**
+ * 获取变量类型
+ */
+func TypeOf(v interface{}) string {
+	return reflect.TypeOf(v).String()
+}
+
+/**
  * map to json
  */
 func MapToJson(obj map[string]interface{}) string {
@@ -106,19 +115,26 @@ func StructToJson(obj interface{}) string {
 }
 
 /**
- * json to struct
+ * int to string
  */
-/*func JsonToStruct(jsonStr string) interface{} {
-	type structResult struct{
+func IntToString(v int) string {
+	return strconv.Itoa(v)
+}
 
-	}
+/**
+ * string to int
+ */
+func StringToInt(str string) int {
+	_int, _ := strconv.Atoi(str)
+	return _int
+}
 
-	if err := json.Unmarshal([]byte(jsonStr), &structResult); err != nil {
-		fmt.Println("json.Unmarshal failed:", err)
-	}
-
-	return structResult
-}*/
+/**
+ * float64 to int
+ */
+func FloatToInt(v float64) int {
+	return int(v)
+}
 
 /**
  * struct to map
@@ -159,9 +175,19 @@ func SendMail(to, subject, body, mailType string) error {
 	return err
 }
 
-// 去除空格
+/**
+ * 去除空格
+ */
 func TrimS(str string) string {
 	str = strings.Replace(str, " ", "", -1)
 	str = strings.Replace(str, "\n", "", -1)
 	return str
+}
+
+/**
+ * 声明 errors 类型
+ */
+func Error(str string) error {
+	err := errors.New(str)
+	return err
 }

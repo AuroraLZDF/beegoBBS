@@ -23,27 +23,17 @@ func (this *RegisterController) Register() {
 	password := this.GetString("password")
 	passwordConfirmation := this.GetString("password_confirmation")
 
-	if _, err := utils.Required(name); err != nil {
+	if err := utils.Required(name); err != nil {
 		this.JsonMessage(2, err.Error(), data)
 		return
 	}
 
-	if _, err := utils.Required(password); err != nil {
+	if err := utils.Equal(password, passwordConfirmation); err != nil {
 		this.JsonMessage(2, err.Error(), data)
 		return
 	}
 
-	if _, err := utils.Required(passwordConfirmation); err != nil {
-		this.JsonMessage(2, err.Error(), data)
-		return
-	}
-
-	if b, str := utils.Equal(password, passwordConfirmation); b == false {
-		this.JsonMessage(2, str, data)
-		return
-	}
-
-	if _, err := utils.IsEmail(email); err != nil {
+	if err := utils.IsEmail(email); err != nil {
 		this.JsonMessage(2, err.Error(), data)
 		return
 	}
@@ -55,8 +45,8 @@ func (this *RegisterController) Register() {
 		return
 	}
 
-	if b, _, err := models.FindUserByFields(models.Users{Email: email}); b == true {
-		this.JsonMessage(2, err, data)
+	if _, err := models.FindUserByFields(models.Users{Email: email}); err != nil {
+		this.JsonMessage(2, err.Error(), data)
 		return
 	}
 
@@ -66,12 +56,16 @@ func (this *RegisterController) Register() {
 		Password:      utils.Md5(password),
 		RememberToken: utils.Md5(password + email),
 	}
-	if res, err := models.AddUser(user); res == false {
+	if err := models.AddUser(user); err != nil {
 		this.JsonMessage(2, err.Error(), data)
 		return
 	}
 
-	_, res, _ := models.FindUserByFields(user)
+	res, err := models.FindUserByFields(user)
+	if err != nil {
+		this.JsonMessage(2, err.Error(), data)
+		return
+	}
 
 	uInfo := map[string]interface{}{
 		"id": res.Id,

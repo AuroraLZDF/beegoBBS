@@ -4,6 +4,7 @@ import (
 	"time"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/auroraLZDF/beegoBBS/utils"
+	"github.com/auroraLZDF/beegoBBS/utils"
 )
 
 type Users struct {
@@ -13,7 +14,7 @@ type Users struct {
 	Password           string
 	Avatar             string
 	Introduction       string
-	RememberToken      string	`gorm:column:remember_token`
+	RememberToken      string	//`gorm:column:remember_token`
 	NotificationCount int
 	CreatedAt         time.Time
 	UpdatedAt         time.Time
@@ -26,17 +27,17 @@ func (Users) TableName() string {
 }
 
 
-func AddUser(u Users) (bool, error) {
+func AddUser(u Users) error {
 	user := u
 
 	db := DB()
 	defer db.Close()
 
 	if err := db.Create(&user).Error; err != nil {
-		return false, err
+		return err
 	}
 
-	return true, nil
+	return nil
 }
 
 func LastUser() Users {
@@ -49,7 +50,7 @@ func LastUser() Users {
 	return user
 }
 
-func FindUserByFields(u Users) (bool , Users, string) {
+func FindUserByFields(u Users) (Users, error) {
 	db := DB()
 	defer db.Close()
 
@@ -58,28 +59,40 @@ func FindUserByFields(u Users) (bool , Users, string) {
 	result := db.Where(u).First(&user)
 
 	if err := result.Error; err != nil {
-		//utils.ShowErr(err)
-		return false, user, err.Error()
+		return user, err
 	}
 
 	if result.RecordNotFound() == true {
-		//utils.ShowErr("数据不存在！")
-		return false, user, "用户不存在！"
+
+		return user, utils.Error("用户不存在！")
 	}
 
-	return true, user, "用户已存在！"
+	return user, nil
 }
 
-func UpdateUserByEmail(email string, u Users) (bool, error) {
+func UpdateUserByEmail(email string, u Users) error {
 	db := DB()
 	defer db.Close()
 
 	user := Users{}
 
 	if err := db.Model(&user).Where("email=?", email).Updates(u).Error; err != nil {
-		return false, err
+		return err
 	}
 
-	return true, nil
+	return nil
+}
+
+func UpdateUserById(id int, u Users) error {
+	db := DB()
+	defer db.Close()
+
+	user := Users{}
+
+	if err := db.Model(&user).Where("id=?", id).Updates(u).Error; err != nil {
+		return err
+	}
+
+	return nil
 }
 

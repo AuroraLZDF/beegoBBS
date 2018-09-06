@@ -10,7 +10,7 @@
 
     <div class="panel-body">
 
-            <form action="/user/save" method="POST" accept-charset="UTF-8">
+            <form action="/user/save" method="POST" accept-charset="UTF-8" class="formAjax">
 {{{ .xsrf_html }}}
 
     <div class="form-group">
@@ -26,6 +26,7 @@
     <textarea name="introduction" id="introduction-field" class="form-control" rows="3">{{{ .user.Introduction }}}</textarea>
     </div>
         <div class="well well-sm">
+            <input type="hidden" name="id" value="{{{ .user.Id }}}">
             <button type="submit" class="btn btn-primary">保存</button>
         </div>
     </form>

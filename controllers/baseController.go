@@ -34,7 +34,7 @@ func (this *BaseController) CheckCk() map[string]interface{} {
 
 		// Golang 使用 JSON unmarshal 数字到 interface{} 数字变成 float64 类型
 		// 将 “id” 键申明为 float64 类型，再转换为 int 型
-		id := int(uMap["id"].(float64))
+		id := utils.FloatToInt(uMap["id"].(float64))
 
 		user := models.Users{
 			//Id: m["id"].(int),
@@ -43,7 +43,7 @@ func (this *BaseController) CheckCk() map[string]interface{} {
 			Email:    uMap["email"].(string),
 			Password: uMap["password"].(string),
 		}
-		if b, _, err := models.FindUserByFields(user); b == false {
+		if _, err := models.FindUserByFields(user); err != nil {
 			log.Fatal("ERROR | ", time.Now().Format("2006-01-02 15:04:05"), " | ", err)
 			return nil
 		}
@@ -65,6 +65,12 @@ func (this *BaseController) JsonMessage(code int, msg string, data map[string]in
 	this.ServeJSON()
 }
 
-func (this *BaseController) ShowError(err string) {
-	this.Ctx.WriteString(err)
+func (this *BaseController) Error403(err string) {
+	this.Data["message"] = err
+	this.TplName = "web/errors/403.html"
+}
+
+func (this *BaseController) Error404(err string) {
+	this.Data["message"] = err
+	this.TplName = "web/errors/404.html"
 }
