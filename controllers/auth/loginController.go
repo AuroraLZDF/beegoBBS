@@ -38,6 +38,7 @@ func (this *LoginController) Login() {
 		"name": user.Name,
 		"email": user.Email,
 		"password": user.Password,
+		"avatar": user.Avatar,
 	}
 	js := utils.MapToJson(uInfo)
 

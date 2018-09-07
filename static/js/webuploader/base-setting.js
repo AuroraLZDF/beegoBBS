@@ -53,7 +53,7 @@ jQuery(function () {
         method: 'POST',
         // 媒体必填数据
         formData: {
-            '_token': csrf_token
+            '_xsrf': csrf_token
         },
         // 上传按钮
         pick: {
@@ -417,7 +417,7 @@ jQuery(function () {
     uploader.onUploadSuccess = function (file, response) {
         console.log(file, response);
         if (response.code == 1) {
-            input_val.val(response.file_path);
+            input_val.val(response.data.file_path);
         } else {
             alert(response.msg);
         }
@@ -472,7 +472,7 @@ jQuery(function () {
     if (file) {
          var html = '<li id="WU_FILE_0" class="state-complete">' +
              '<p class="title"></p>' +
-             '<p class="imgWrap"><img src="'+ file +'"></p>' +
+             '<p class="imgWrap"><img src="'+ file +'" width="180" height="180"></p>' +
              '<p class="progress"><span style="display: none; width: 0px;"></span></p>' +
              '</li>';
         $(html).appendTo($queue);

@@ -8,11 +8,13 @@
     <!-- CSRF Token -->
     <meta name="_xsrf" content="{{{ .xsrf_token }}}" />
 
-<title>{{{ config.title }}}</title>
+    <title>{{{ config.title }}}</title>
     <link rel="icon" href="/static/images/favicon.ico">
 
     <!-- Styles -->
 {{{ "/static/css/index.css" | assets_css }}}
+    <!-- Scripts -->
+{{{ "/static/js/jquery.min.js" | assets_js }}}
 </head>
 <body>
         <!-- 全局弹层 -->

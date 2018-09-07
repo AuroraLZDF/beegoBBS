@@ -191,3 +191,10 @@ func Error(str string) error {
 	err := errors.New(str)
 	return err
 }
+
+/**
+ * 格式化日期
+ */
+func Date(format string) string {
+	return time.Now().Format(format)
+}

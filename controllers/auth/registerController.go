@@ -72,6 +72,7 @@ func (this *RegisterController) Register() {
 		"name": res.Name,
 		"email": res.Email,
 		"password": res.Password,
+		"avatar": user.Avatar,
 	}
 	js := utils.MapToJson(uInfo)
 

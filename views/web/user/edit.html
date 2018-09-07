@@ -1,5 +1,7 @@
 
 {{{ template "web/layouts/header.html" . }}}
+
+{{{ "/static/js/webuploader/webuploader.css" | assets_css }}}
 <div class="container">
     <div class="panel panel-default col-md-10 col-md-offset-1">
         <div class="panel-heading">
@@ -8,31 +10,60 @@
             </h4>
         </div>
 
-    <div class="panel-body">
+        <div class="panel-body">
 
             <form action="/user/save" method="POST" accept-charset="UTF-8" class="formAjax">
-{{{ .xsrf_html }}}
+                {{{ .xsrf_html }}}
 
-    <div class="form-group">
-        <label for="name-field">用户名</label>
-            <input class="form-control" type="text" name="name" id="name-field" value="{{{ .user.Name }}}" />
-    </div>
-    <div class="form-group">
-        <label for="email-field">邮 箱</label>
-            <input class="form-control" type="text" name="email" id="email-field" value="{{{ .user.Email }}}" />
-    </div>
-    <div class="form-group">
-        <label for="introduction-field">个人简介</label>
-    <textarea name="introduction" id="introduction-field" class="form-control" rows="3">{{{ .user.Introduction }}}</textarea>
-    </div>
-        <div class="well well-sm">
-            <input type="hidden" name="id" value="{{{ .user.Id }}}">
-            <button type="submit" class="btn btn-primary">保存</button>
+                <div class="form-group">
+                    <label for="name-field">用户名</label>
+                    <input class="form-control" type="text" name="name" id="name-field" value="{{{ .user.Name }}}" />
+                </div>
+                <div class="form-group">
+                    <label for="email-field">邮 箱</label>
+                    <input class="form-control" type="text" name="email" id="email-field" value="{{{ .user.Email }}}" />
+                </div>
+                <div class="form-group">
+                    <label for="introduction-field">个人简介</label>
+                    <textarea name="introduction" id="introduction-field" class="form-control" rows="3">{{{ .user.Introduction }}}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="" class="avatar-label">用户头像</label>
+                    <input type="hidden" name="avatar" value="{{{if .user.Avatar }}}{{{ .user.Avatar }}}{{{end}}}">
+                    <div id="uploader" class="wu-example">
+                        <div id="dndArea" class="placeholder">
+                            <div id="filePicker"></div>
+                        </div>
+                        <div class="queueList">
+
+                        </div>
+                        <div class="statusBar" style="display:none;">
+                            <div class="progress">
+                                <span class="text">0%</span>
+                                <span class="percentage"></span>
+                            </div>
+                        </div>
+                    </div>
+                    {{{if .user.avatar }}}
+                    <img class="thumbnail img-responsive" src="{{{ .user.avatar }}}" width="200" />
+                    {{{end}}}
+                </div>
+                <div class="well well-sm">
+                    <input type="hidden" name="id" value="{{{ .user.Id }}}">
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            </form>
         </div>
-    </form>
-    </div>
     </div>
 </div>
 
+{{{ "/static/js/webuploader/webuploader.min.js" | assets_js }}}
+<script type="text/javascript">
+    var upload_url = '/file/upload/',
+    csrf_token = '{{{ .xsrf_token }}}',
+    input_val = $('input[name="avatar"]'),
+    fileNumLimit = 1;
+</script>
+{{{ "/static/js/webuploader/base-setting.js" | assets_js }}}
 
 {{{ template "web/layouts/footer.html" .}}}

@@ -65,6 +65,7 @@ func (this *UserController) Update() {
 	name := this.GetString("name")
 	email := this.GetString("email")
 	introduction := this.GetString("introduction")
+	avatar := this.GetString("avatar")
 
 	if err := utils.Required(id); err != nil {
 		this.JsonMessage(2, err.Error(), data)
@@ -86,12 +87,18 @@ func (this *UserController) Update() {
 		return
 	}
 
+	if err := utils.Required(avatar); err != nil {
+		this.JsonMessage(2, err.Error(), data)
+		return
+	}
+
 	_id := utils.StringToInt(id)
 
 	user := models.Users{
 		Name:name,
 		Email:email,
 		Introduction:introduction,
+		Avatar:avatar,
 	}
 	if err := models.UpdateUserById(_id, user); err != nil {
 		this.JsonMessage(2, err.Error(), data)

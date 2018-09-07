@@ -6,6 +6,7 @@ import (
 	"github.com/auroraLZDF/beegoBBS/controllers/auth"
 	"github.com/dchest/captcha"
 	"github.com/auroraLZDF/beegoBBS/controllers/web"
+	"github.com/auroraLZDF/beegoBBS/controllers/upload"
 )
 
 func init() {
@@ -33,6 +34,10 @@ func init() {
 	beego.Router("/user/edit/:id", &web.UserController{},"get:Edit")
 	beego.Router("/user/save", &web.UserController{},"post:Update")
 
+	// 上传文件
+	beego.Router("/file/upload", &upload.WebUploadController{}, "post:Upload")
+
 	// 验证码
 	beego.Handler("/captcha/*.png", captcha.Server(240, 80))
+
 }
