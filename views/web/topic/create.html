@@ -1,0 +1,46 @@
+{{{ template "web/layouts/header.html" . }}}
+
+<div class="container">
+<div class="col-md-10 col-md-offset-1">
+<div class="panel panel-default">
+
+<div class="panel-body">
+    <h2 class="text-center">
+        <i class="glyphicon glyphicon-edit"></i>
+        新建话题
+    </h2>
+
+    <hr>
+
+    {{{ template "web/common/error.html" }}}
+        <form action="/topics/store" method="POST" accept-charset="UTF-8" class="formAjax">
+            {{{ .xsrf_html }}}
+        <div class="form-group">
+                <input class="form-control" type="text" name="title" value="{{{ if .topic.title }}} {{{ .topic.title }}}{{{ end }}}" placeholder="请填写标题" required/>
+        </div>
+
+        <div class="form-group">
+        <select class="form-control" name="category_id" required>
+                <option value="" selected>请选择分类</option>
+            {{{ range $index, $category := .categories }}}
+                <option value="{{{ $category.Id }}}">{{{ $category.Name }}}</option>
+            {{{ end }}}
+        </select>
+        </div>
+
+    <div class="form-group" id="editor-md">
+        {{{ template "web/layouts/simditor.html" .}}}
+    </div>
+
+    <div class="well well-sm">
+        <input type="hidden" name="user_id" value="{{{ .uInfo.id }}}">
+        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> 保存</button>
+    </div>
+</form>
+</div>
+</div>
+</div>
+</div>
+
+{{{ template "web/layouts/footer.html" .}}}
+

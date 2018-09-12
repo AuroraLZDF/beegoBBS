@@ -1,0 +1,33 @@
+
+
+    <textarea name="body" class="form-control" id="editor" rows="3" placeholder="请填入至少三个字符的内容。" autofocus required></textarea>
+
+
+<link rel="stylesheet" type="text/css" href="/static/js/simditor/styles/simditor.css" />
+
+
+<script type="text/javascript" src="/static/js/simditor/scripts/module.js"></script>
+<script type="text/javascript" src="/static/js/simditor/scripts/hotkeys.js"></script>
+<script type="text/javascript" src="/static/js/simditor/scripts/uploader.js"></script>
+<script type="text/javascript" src="/static/js/simditor/scripts/simditor.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var editor = new Simditor({
+            textarea: $('#editor'),
+            toolbar: ['title', 'bold', 'italic', 'underline', 'strikethrough', 'fontScale', 'color', 'ol', 'ul', 'blockquote', 'code', 'table', 'link', 'image', 'hr', 'indent', 'outdent', 'alignment'],
+            allowedTags: ['br', 'span', 'a', 'img', 'b', 'strong', 'i', 'strike', 'u', 'font', 'p', 'ul', 'ol', 'li', 'blockquote', 'pre', 'code', 'h1', 'h2', 'h3', 'h4', 'hr'],
+            placeholder: 'Speak freely...',
+            upload: {
+                url: '/file/upload',
+                params: { _xsrf: '{{{ .xsrf_token }}}' },
+                fileKey: 'file',
+                connectionCount: 3,
+                leaveConfirm: '文件上传中，关闭此页面将取消上传。'
+            },
+            pasteImage: true,
+            defaultImage: '/static/js/simditor/images/image.png',
+            // allowedAttributes:
+            // allowedStyles:
+        });
+    });
+</script>

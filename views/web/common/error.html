@@ -1,0 +1,10 @@
+{{{ if .errors }}}
+    <div class="alert alert-danger">
+        <h4>有错误发生：</h4>
+        <ul>
+            {{{ range .errors }}}
+                <li><i class="glyphicon glyphicon-remove"></i> {{{ . }}}</li>
+            {{{ end }}}
+        </ul>
+    </div>
+{{{ end }}}

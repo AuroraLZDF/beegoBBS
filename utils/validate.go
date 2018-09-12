@@ -56,3 +56,12 @@ func URL(url string) error {
 
 	return nil
 }
+
+func Numeric(num int) error {
+	errs := validate.Var(num, "numeric")
+	if errs != nil {
+		return errs
+	}
+
+	return nil
+}

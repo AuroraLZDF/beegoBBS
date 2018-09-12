@@ -40,4 +40,14 @@ func init() {
 	// 验证码
 	beego.Handler("/captcha/*.png", captcha.Server(240, 80))
 
+	// 导航栏
+	beego.Router("/category/show/:id", &web.CategoryController{}, "get:Show")
+	// Topic
+	beego.Router("/topics/?:order", &web.TopicController{}, "get:Index")
+	beego.Router("/topics/show", &web.TopicController{}, "get:Show")
+	beego.Router("/topics/create", &web.TopicController{}, "get:Create")
+	beego.Router("/topics/store", &web.TopicController{}, "post:Save")
+	beego.Router("/topics/edit", &web.TopicController{}, "get:Edit")
+	beego.Router("/topics/update", &web.TopicController{}, "post:Update")
+	beego.Router("/topics/destroy", &web.TopicController{}, "post:Destroy")
 }

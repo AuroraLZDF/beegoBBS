@@ -28,12 +28,10 @@ func (Users) TableName() string {
 
 
 func AddUser(u Users) error {
-	user := u
-
 	db := DB()
 	defer db.Close()
 
-	if err := db.Create(&user).Error; err != nil {
+	if err := db.Create(&u).Error; err != nil {
 		return err
 	}
 
