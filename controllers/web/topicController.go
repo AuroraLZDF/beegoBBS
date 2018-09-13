@@ -16,10 +16,10 @@ func (this *TopicController) Index() {
 	order := this.Ctx.Input.Param(":order")
 
 	where := map[string]interface{}{
-		"id": id,
+		"id":       id,
 		"category": category,
-		"order": order,
-		"page": page,
+		"order":    order,
+		"page":     page,
 	}
 	topic := models.Topics{}
 	result, err := topic.TopicLists(where)
@@ -28,6 +28,7 @@ func (this *TopicController) Index() {
 	}
 
 	//fmt.Println(result)
+	//return
 
 	this.Data["order"] = order
 	this.Data["topics"] = result
@@ -35,7 +36,18 @@ func (this *TopicController) Index() {
 }
 
 func (this *TopicController) Show() {
+	id := this.Ctx.Input.Param(":id")
+	if err := utils.Required(id); err != nil {
+		this.Error404(err.Error())
+	}
 
+	result, err := models.Topics{}.TopicByID(utils.StringToInt(id))
+	if err != nil {
+		this.Error404(err.Error())
+	}
+
+	this.Data["topic"] = result
+	this.TplName = "web/topic/show.html"
 }
 
 func (this *TopicController) Create() {
@@ -54,22 +66,22 @@ func (this *TopicController) Save() {
 	title := this.GetString("title")
 	body := this.GetString("body")
 
-	if err :=utils.Numeric(userId); err != nil {
+	if err := utils.Numeric(userId); err != nil {
 		this.JsonMessage(2, err.Error(), data)
 		return
 	}
 
-	if err :=utils.Numeric(categoryId); err != nil {
+	if err := utils.Numeric(categoryId); err != nil {
 		this.JsonMessage(2, err.Error(), data)
 		return
 	}
 
-	if err :=utils.Required(title); err != nil {
+	if err := utils.Required(title); err != nil {
 		this.JsonMessage(2, err.Error(), data)
 		return
 	}
 
-	if err :=utils.Required(body); err != nil {
+	if err := utils.Required(body); err != nil {
 		this.JsonMessage(2, err.Error(), data)
 		return
 	}
@@ -78,9 +90,9 @@ func (this *TopicController) Save() {
 		Title:      title,
 		CategoryId: categoryId,
 		Body:       body,
-		UserId: 	userId,
+		UserId:     userId,
 	}
-	if err :=topic.Create(topic); err != nil {
+	if err := topic.Create(topic); err != nil {
 		this.JsonMessage(2, err.Error(), data)
 		return
 	}

@@ -2,13 +2,14 @@ package models
 
 import (
 	"time"
+
 	"github.com/auroraLZDF/beegoBBS/utils"
 )
 
 type Categories struct {
-	Id          int
-	Name        string
-	Description string
+	Id          int    `gorm:"primary_key"`
+	Name        string `gorm:"not null"`
+	Description string `gorm:"not null"`
 	PostCount   int
 	CreatedAt   time.Time
 	UpdatedAt   time.Time

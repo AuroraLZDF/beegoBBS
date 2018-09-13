@@ -2,30 +2,30 @@ package models
 
 import (
 	"time"
-	_ "github.com/go-sql-driver/mysql"
-	_ "github.com/auroraLZDF/beegoBBS/utils"
+
 	"github.com/auroraLZDF/beegoBBS/utils"
+	_ "github.com/auroraLZDF/beegoBBS/utils"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type Users struct {
-	Id                 int
-	Name               string
-	Email              string
-	Password           string
-	Avatar             string
-	Introduction       string
-	RememberToken      string	//`gorm:column:remember_token`
+	Id                int    `gorm:"primary_key"`
+	Name              string `gorm:"not null"`
+	Email             string `gorm:"not null"`
+	Password          string `gorm:"not null"`
+	Avatar            string
+	Introduction      string
+	RememberToken     string
 	NotificationCount int
 	CreatedAt         time.Time
 	UpdatedAt         time.Time
-	LastActivedAt    time.Time
+	LastActivedAt     time.Time
 }
 
 // 设置User的表名为`profiles`
 func (Users) TableName() string {
 	return "bbs_users"
 }
-
 
 func AddUser(u Users) error {
 	db := DB()
@@ -93,4 +93,3 @@ func UpdateUserById(id int, u Users) error {
 
 	return nil
 }
-

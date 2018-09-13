@@ -1,12 +1,12 @@
 package routers
 
 import (
-	"github.com/auroraLZDF/beegoBBS/controllers"
 	"github.com/astaxie/beego"
+	"github.com/auroraLZDF/beegoBBS/controllers"
 	"github.com/auroraLZDF/beegoBBS/controllers/auth"
-	"github.com/dchest/captcha"
-	"github.com/auroraLZDF/beegoBBS/controllers/web"
 	"github.com/auroraLZDF/beegoBBS/controllers/upload"
+	"github.com/auroraLZDF/beegoBBS/controllers/web"
+	"github.com/dchest/captcha"
 )
 
 func init() {
@@ -30,9 +30,9 @@ func init() {
 	/** auth end **/
 
 	// user center
-	beego.Router("/user/:id", &web.UserController{},"get:Show")
-	beego.Router("/user/edit/:id", &web.UserController{},"get:Edit")
-	beego.Router("/user/save", &web.UserController{},"post:Update")
+	beego.Router("/user/:id", &web.UserController{}, "get:Show")
+	beego.Router("/user/edit/:id", &web.UserController{}, "get:Edit")
+	beego.Router("/user/save", &web.UserController{}, "post:Update")
 
 	// 上传文件
 	beego.Router("/file/upload", &upload.WebUploadController{}, "post:Upload")
@@ -44,7 +44,7 @@ func init() {
 	beego.Router("/category/show/:id", &web.CategoryController{}, "get:Show")
 	// Topic
 	beego.Router("/topics/?:order", &web.TopicController{}, "get:Index")
-	beego.Router("/topics/show", &web.TopicController{}, "get:Show")
+	beego.Router("/topics/show/:id", &web.TopicController{}, "get:Show")
 	beego.Router("/topics/create", &web.TopicController{}, "get:Create")
 	beego.Router("/topics/store", &web.TopicController{}, "post:Save")
 	beego.Router("/topics/edit", &web.TopicController{}, "get:Edit")

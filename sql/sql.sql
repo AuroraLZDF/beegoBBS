@@ -58,5 +58,20 @@ CREATE TABLE `bbs_topics` (
   CONSTRAINT `bbs_topics_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `bbs_users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+DROP TABLE IF EXISTS `bbs_replies`;
+CREATE TABLE `bbs_replies` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `topic_id` int(10) unsigned NOT NULL DEFAULT 0,
+  `user_id` int(10) unsigned NOT NULL DEFAULT 0,
+  `content` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `bbs_replies_topic_id_index` (`topic_id`),
+  KEY `bbs_replies_user_id_index` (`user_id`),
+  CONSTRAINT `bbs_replies_topic_id_foreign` FOREIGN KEY (`topic_id`) REFERENCES `bbs_topics` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `bbs_replies_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `bbs_users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 

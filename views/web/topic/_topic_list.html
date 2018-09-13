@@ -5,33 +5,33 @@
     {{{ range $index, $topic := .topics }}}
 <li class="media">
 <div class="media-left">
-        <a href="/user/{{{ $topic.UserId }}}">
+        <a href="/user/{{{ $topic.User.Id }}}">
         <img class="media-object img-thumbnail" style="width: 52px; height: 52px;"
-        src="{{{ $topic.user.avatar }}}" title="{{{ $topic.user.name }}}">
+        src="{{{ $topic.User.Avatar }}}" title="{{{ $topic.User.Name }}}">
 </a>
 </div>
 
 <div class="media-body">
 
 <div class="media-heading">
-        <a href="/topics/show/{{{ $topic.id }}}" title="{{{ $topic.title }}}">{{{ $topic.title }}}</a>
-        <a class="pull-right" href="/topics/show/{{{ $topic.id }}}" ><span class="badge"> {{{ $topic.reply_count }}} </span></a>
+        <a href="/topics/show/{{{ $topic.Id }}}" title="{{{ $topic.Title }}}">{{{ $topic.Title }}}</a>
+        <a class="pull-right" href="/topics/show/{{{ $topic.Id }}}" ><span class="badge"> {{{ $topic.ReplyCount }}} </span></a>
 </div>
 
 <div class="media-body meta">
-        <a href="/category/show/{{{ $topic.category.id }}}" title="{{{ $topic.category.name }}}">
+        <a href="/category/show/{{{ $topic.Category.Id }}}" title="{{{ $topic.Category.Name }}}">
     <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-{{{ $topic.category.name }}}
+{{{ $topic.Category.Name }}}
 </a>
 
     <span> • </span>
-        <a href="/user/{{{ $topic.user_id }}}" title="{{{ $topic.user.name }}}">
+        <a href="/user/{{{ $topic.User.Id }}}" title="{{{ $topic.User.Name }}}">
     <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-{{{ $topic.user.name }}}
+{{{ $topic.User.Name }}}
 </a>
     <span> • </span>
     <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
-<span class="timeago" title="最后活跃于">{{{ $topic.updated_at }}}</span>
+<span class="timeago" title="最后活跃于">{{{ $topic.UpdatedAt }}}</span>
 </div>
 
 </div>
