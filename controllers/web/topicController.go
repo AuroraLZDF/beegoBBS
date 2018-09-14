@@ -20,7 +20,7 @@ func (this *TopicController) Index() {
 		"category":    category,
 		"order":       order,
 		"page":        page,
-		"currentPath": this.Ctx.Request.URL.Path,
+		"currentPath": utils.CurrentPath(this.Ctx.Request),
 	}
 	topic := models.Topics{}
 	result, err := topic.TopicLists(where)

@@ -1,20 +1,21 @@
 package utils
 
 import (
-	"github.com/astaxie/beego"
-	"fmt"
-	"time"
 	"crypto/md5"
-	"encoding/hex"
 	"encoding/base64"
+	"encoding/hex"
 	"encoding/json"
+	"errors"
+	"fmt"
 	"net/smtp"
-	"strings"
-	_ "context"
 	"os"
 	"reflect"
-	"errors"
 	"strconv"
+	"strings"
+	"time"
+
+	"github.com/astaxie/beego"
+	"net/http"
 )
 
 var cfg = beego.AppConfig
@@ -197,4 +198,10 @@ func Error(str string) error {
  */
 func Date(format string) string {
 	return time.Now().Format(format)
+}
+
+/**
+ */
+func CurrentPath(request *http.Request) string {
+	return request.URL.Path
 }
