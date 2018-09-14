@@ -14,8 +14,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/astaxie/beego"
 	"net/http"
+
+	"github.com/astaxie/beego"
 )
 
 var cfg = beego.AppConfig
