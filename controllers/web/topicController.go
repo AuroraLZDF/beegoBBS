@@ -13,13 +13,14 @@ func (this *TopicController) Index() {
 	id, _ := this.GetInt("id")
 	category, _ := this.GetInt("category")
 	page, _ := this.GetInt("page")
-	order := this.Ctx.Input.Param(":order")
+	order := this.GetString("order")
 
 	where := map[string]interface{}{
-		"id":       id,
-		"category": category,
-		"order":    order,
-		"page":     page,
+		"id":          id,
+		"category":    category,
+		"order":       order,
+		"page":        page,
+		"currentPath": this.Ctx.Request.URL.Path,
 	}
 	topic := models.Topics{}
 	result, err := topic.TopicLists(where)
@@ -27,11 +28,9 @@ func (this *TopicController) Index() {
 		this.Error404("话题列表加载失败")
 	}
 
-	//fmt.Println(result)
-	//return
-
 	this.Data["order"] = order
-	this.Data["topics"] = result
+	this.Data["topics"] = result["topics"]
+	this.Data["pageNate"] = result["pageNate"]
 	this.TplName = "web/topic/index.html"
 }
 

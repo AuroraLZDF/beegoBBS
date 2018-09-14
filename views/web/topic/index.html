@@ -10,8 +10,8 @@
 
                 <div class="panel-heading">
                     <ul class="nav nav-pills">
-                        <li class="{{{ if ne .order "recent"  }}}active{{{ end }}}"><a href="/topics/default">最后回复</a></li>
-                        <li class="{{{ if eq .order "recent" }}}active{{{ end }}}"><a href="/topics/recent">最新发布</a></li>
+                        <li class="{{{ if ne .order "recent"  }}}active{{{ end }}}"><a href="/topics?order=default">最后回复</a></li>
+                        <li class="{{{ if eq .order "recent" }}}active{{{ end }}}"><a href="/topics?order=recent">最新发布</a></li>
                     </ul>
                 </div>
 
@@ -19,7 +19,7 @@
                 <!-- 话题列表 -->
                     {{{ template "web/topic/_topic_list.html" . }}}
                 <!-- 分页 -->
-                    {{/*{!! $topics->render() !!}*/}}
+                    {{{ str2html .pageNate }}}
                 </div>
             </div>
         </div>

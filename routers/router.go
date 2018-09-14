@@ -43,7 +43,7 @@ func init() {
 	// 导航栏
 	beego.Router("/category/show/:id", &web.CategoryController{}, "get:Show")
 	// Topic
-	beego.Router("/topics/?:order", &web.TopicController{}, "get:Index")
+	beego.Router("/topics", &web.TopicController{}, "get:Index")
 	beego.Router("/topics/show/:id", &web.TopicController{}, "get:Show")
 	beego.Router("/topics/create", &web.TopicController{}, "get:Create")
 	beego.Router("/topics/store", &web.TopicController{}, "post:Save")

@@ -41,8 +41,6 @@ func (Topics) Create(val Topics) error {
 	db := DB()
 	defer db.Close()
 
-	//fmt.Println(val)
-
 	res := db.Create(&val)
 	if err := res.Error; err != nil {
 		return err
@@ -71,7 +69,7 @@ func (Topics) FindAll() (*[]Topics, error) {
 }
 
 // 获得话题分页列表
-func (Topics) TopicLists(params map[string]interface{}) (*[]Topics, error) {
+func (Topics) TopicLists(params map[string]interface{}) (map[string]interface{}, error) {
 	db := DB()
 	defer db.Close()
 
@@ -114,15 +112,22 @@ func (Topics) TopicLists(params map[string]interface{}) (*[]Topics, error) {
 	//result := _db.Find(&topic)
 	//sql := "select t.*,u.name as username,u.avatar,c.name as category_name from bbs_topics t left join bbs_users u on t.user_id=u.id left join bbs_categories c on c.id=t.category_id where " + where
 	//result, err := utils.GetAll(sql)
+	var count int64
 	var topics []Topics
+	var m = make(map[string]interface{})
 
 	_db.Find(&topics)
-	result := db.Preload("Category").Preload("User").Find(&topics)
+	result := db.Preload("Category").Preload("User").Find(&topics).Count(&count)
 	if err := result.Error; err != nil {
-		return &topics, err
+		return m, err
 	}
 
-	return &topics, nil
+	pageNate := utils.Paginator(page, limit, count, params["currentPath"].(string))
+
+	return map[string]interface{}{
+		"pageNate": pageNate,
+		"topics":   &topics,
+	}, nil
 }
 
 // 根据话题 id 检索
