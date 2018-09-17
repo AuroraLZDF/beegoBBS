@@ -1,12 +1,13 @@
 package controllers
 
 import (
-	"github.com/astaxie/beego"
-	"github.com/auroraLZDF/beegoBBS/utils"
-	"github.com/auroraLZDF/beegoBBS/models"
 	"html/template"
 	"log"
 	"time"
+
+	"github.com/astaxie/beego"
+	"github.com/auroraLZDF/beegoBBS/models"
+	"github.com/auroraLZDF/beegoBBS/utils"
 )
 
 type BaseController struct {

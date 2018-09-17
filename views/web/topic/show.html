@@ -40,30 +40,28 @@
                         {{{ str2html .topic.Body}}}
                     </div>
 
-                    {{{if eq true false}}}
-                    @if(App\Http\Controllers\Bbs\BaseController::authCheck($topic->user))
+                    {{{if eq .CheckMe true }}}                   
                         <div class="operate">
                             <hr>
-                            <a href="{{ route('bbs.topics.edit', $topic->id) }}" class="btn btn-default btn-xs pull-left" role="button">
+                            <a href="/topics/edit/{{{ .topic.Id }}}" class="btn btn-default btn-xs pull-left" role="button">
                                 <i class="glyphicon glyphicon-edit"></i> 编辑
                             </a>
 
-                            <form action="{{ route('bbs.topics.destroy', $topic->id) }}" method="post">
-                                {{ csrf_field() }}
-                                {{ method_field('DELETE') }}
+                            <form action="/topics/destroy" method="post" class="formAjax">
+                                {{{ .xsrf_html }}}
+                                <input type="hidden" name="id" value="{{{ .topic.Id }}}">
+                                <input type="hidden" name="user_id" value="{{{ .topic.UserId }}}">
                                 <button type="submit" class="btn btn-default btn-xs pull-left" style="margin-left: 6px">
-                                    <i class="glyphicon glyphicon-trash"></i>
-                                    删除
+                                    <i class="glyphicon glyphicon-trash"></i>删除
                                 </button>
                             </form>
                         </div>
-                    @endif
                     {{{end}}}
 
                 </div>
             </div>
 
-            {{-- 用户回复列表 --}}
+           
             <div class="panel panel-default topic-reply">
                 <div class="panel-body">
                     @includeWhen(auth('bbs')->check(), 'bbs.topics._reply_box', ['topic' => $topic])

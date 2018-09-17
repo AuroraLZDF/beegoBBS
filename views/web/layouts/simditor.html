@@ -1,6 +1,5 @@
 
-
-    <textarea name="body" class="form-control" id="editor" rows="3" placeholder="请填入至少三个字符的内容。" autofocus required></textarea>
+    <textarea name="body" class="form-control" id="editor" rows="3" placeholder="请填入至少三个字符的内容。" autofocus required>{{{ if .topic.Body }}} {{{ .topic.Body }}} {{{ end }}}</textarea>
 
 
 <link rel="stylesheet" type="text/css" href="/static/js/simditor/styles/simditor.css" />

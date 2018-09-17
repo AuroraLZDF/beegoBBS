@@ -78,27 +78,34 @@ func (Topics) TopicLists(params map[string]interface{}) (map[string]interface{},
 	var count int64
 	var topics []Topics
 
-	var page = params["page"].(int)
+	var page = 0
+	if params["page"] != nil {
+		page = params["page"].(int)
+	}
+
 	if page <= 1 {
 		page = 1
 	}
 
 	db.Where("status = ?", STATUS_ON)
 
-	id := params["id"].(int)
-	if id > 0 {
-		db = db.Where("id = ?", id)
+	if params["id"] != nil {
+		db = db.Where("id = ?", params["id"].(int))
 	}
 
-	category := params["category"].(int)
-	if category > 0 {
-		db = db.Where("category_id = ?", category)
+	if params["category"] != nil {
+		db = db.Where("category_id = ?", params["category"].(int))
 	}
 
 	// 获取记录个数
 	db.Model(topics).Count(&count)
+	fmt.Println("count:", count)
 
-	order := params["order"]
+	var order = ""
+	if params["order"] != nil {
+		order = params["order"].(string)
+	}
+
 	if order == "recent" {
 		db = db.Order("created_at desc")
 	} else {
@@ -128,11 +135,6 @@ func (Topics) TopicByID(id int) (*Topics, error) {
 
 	var topic Topics
 
-	//db.Where("id=?", id).First(&topic)
-	// 关联的关键代码
-	//db.Model(&topic).Related(&topic.Category, "CategoryId")
-	//result := db.Model(&topic).Related(&topic.User, "UserId")
-
 	result := db.Where("id=?", id).Preload("Category").Preload("User").First(&topic)
 	if err := result.Error; err != nil {
 		return &topic, err
@@ -143,4 +145,35 @@ func (Topics) TopicByID(id int) (*Topics, error) {
 	}
 
 	return &topic, nil
+}
+
+// 修改话题内容
+func (Topics) UpdateById(id int, T Topics) error {
+	db := DB()
+	defer db.Close()
+
+	var topic Topics
+
+	if err := db.Model(topic).Where("id=?", id).Updates(T).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// 删除话题
+func (Topics) DeleteById(id int) error {
+	db := DB()
+	defer db.Close()
+
+	var topic Topics
+	if _, err := topic.TopicByID(id); err != nil {
+		return err
+	}
+
+	if err := db.Where("id=?", id).Delete(topic).Error; err != nil {
+		return err
+	}
+
+	return nil
 }

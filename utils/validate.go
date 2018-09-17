@@ -58,7 +58,7 @@ func URL(url string) error {
 }
 
 func Numeric(num int) error {
-	errs := validate.Var(num, "numeric")
+	errs := validate.Var(num, "required,numeric")
 	if errs != nil {
 		return errs
 	}

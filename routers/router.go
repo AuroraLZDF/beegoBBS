@@ -2,7 +2,6 @@ package routers
 
 import (
 	"github.com/astaxie/beego"
-	"github.com/auroraLZDF/beegoBBS/controllers"
 	"github.com/auroraLZDF/beegoBBS/controllers/auth"
 	"github.com/auroraLZDF/beegoBBS/controllers/upload"
 	"github.com/auroraLZDF/beegoBBS/controllers/web"
@@ -10,7 +9,7 @@ import (
 )
 
 func init() {
-	beego.Router("/", &controllers.HomeController{})
+	beego.Router("/", &web.TopicController{}, "get:Index")
 
 	/** auth start **/
 	// login
@@ -41,13 +40,13 @@ func init() {
 	beego.Handler("/captcha/*.png", captcha.Server(240, 80))
 
 	// 导航栏
-	beego.Router("/category/show/:id", &web.CategoryController{}, "get:Show")
+	beego.Router("/categories/show/:id", &web.CategoryController{}, "get:Show")
 	// Topic
 	beego.Router("/topics", &web.TopicController{}, "get:Index")
 	beego.Router("/topics/show/:id", &web.TopicController{}, "get:Show")
 	beego.Router("/topics/create", &web.TopicController{}, "get:Create")
 	beego.Router("/topics/store", &web.TopicController{}, "post:Save")
-	beego.Router("/topics/edit", &web.TopicController{}, "get:Edit")
+	beego.Router("/topics/edit/:id", &web.TopicController{}, "get:Edit")
 	beego.Router("/topics/update", &web.TopicController{}, "post:Update")
 	beego.Router("/topics/destroy", &web.TopicController{}, "post:Destroy")
 }

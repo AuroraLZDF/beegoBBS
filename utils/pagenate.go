@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"fmt"
 	"math"
 )
 
@@ -13,7 +12,6 @@ import (
 * currentPath	url
  */
 func Paginator(page, prepage int, nums int64, currentPath string) string {
-	fmt.Println("page:", page, " | prepage:", prepage, " | num", nums, " currentPath | ", currentPath)
 	var firstpage int //前一页地址
 	var lastpage int  //后一页地址
 
@@ -48,7 +46,6 @@ func Paginator(page, prepage int, nums int64, currentPath string) string {
 		lastpage = page + 1
 	default:
 		pages = make([]int, int(math.Min(5, float64(totalpages))))
-		fmt.Println(pages)
 		for i, _ := range pages {
 			pages[i] = i + 1
 		}

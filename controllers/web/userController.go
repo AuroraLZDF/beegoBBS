@@ -1,10 +1,11 @@
 package web
 
 import (
-	"github.com/auroraLZDF/beegoBBS/utils"
-	"github.com/auroraLZDF/beegoBBS/models"
 	"log"
 	"time"
+
+	"github.com/auroraLZDF/beegoBBS/models"
+	"github.com/auroraLZDF/beegoBBS/utils"
 )
 
 type UserController struct {
@@ -38,7 +39,7 @@ func (this *UserController) Edit() {
 	id := this.Ctx.Input.Param(":id")
 
 	// 检测是否当前用户
-	if err := this.CheckMe(id); err != nil {
+	if err := this.CheckMe(utils.StringToInt(id)); err != nil {
 		this.Error403(err.Error())
 		return
 	}
@@ -54,7 +55,7 @@ func (this *UserController) Edit() {
 }
 
 func (this *UserController) Update() {
-	id := this.GetString("id")
+	id, _ := this.GetInt("id")
 
 	// 检测是否当前用户
 	if err := this.CheckMe(id); err != nil {
@@ -67,7 +68,7 @@ func (this *UserController) Update() {
 	introduction := this.GetString("introduction")
 	avatar := this.GetString("avatar")
 
-	if err := utils.Required(id); err != nil {
+	if err := utils.Numeric(id); err != nil {
 		this.JsonMessage(2, err.Error(), data)
 		return
 	}
@@ -92,19 +93,17 @@ func (this *UserController) Update() {
 		return
 	}
 
-	_id := utils.StringToInt(id)
-
 	user := models.Users{
-		Name:name,
-		Email:email,
-		Introduction:introduction,
-		Avatar:avatar,
+		Name:         name,
+		Email:        email,
+		Introduction: introduction,
+		Avatar:       avatar,
 	}
-	if err := models.UpdateUserById(_id, user); err != nil {
+	if err := models.UpdateUserById(id, user); err != nil {
 		this.JsonMessage(2, err.Error(), data)
 		return
 	}
 
-	data["url"] = "/user/" + id
+	data["url"] = "/user/" + utils.IntToString(id)
 	this.JsonMessage(1, "修改个人信息成功", data)
 }

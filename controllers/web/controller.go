@@ -1,10 +1,10 @@
 package web
 
 import (
-	"github.com/auroraLZDF/beegoBBS/controllers"
 	"html/template"
+
+	"github.com/auroraLZDF/beegoBBS/controllers"
 	"github.com/auroraLZDF/beegoBBS/utils"
-	"fmt"
 )
 
 type Controller struct {
@@ -31,12 +31,9 @@ func (this *Controller) Prepare() {
 	this.Redirect("/login", 302)
 }
 
-func (this *Controller) CheckMe(id string) error {
+func (this *Controller) CheckMe(id int) error {
 
-	fmt.Println(utils.TypeOf(id), utils.TypeOf(uInfo["id"]))
-
-	if utils.StringToInt(id) != utils.FloatToInt(uInfo["id"].(float64)) {
-		fmt.Println(id, uInfo["id"])
+	if id != utils.FloatToInt(uInfo["id"].(float64)) {
 		return utils.Error("对不起，您无权访问！")
 	}
 
