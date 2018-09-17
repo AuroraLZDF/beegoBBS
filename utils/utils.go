@@ -7,14 +7,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net/http"
 	"net/smtp"
 	"os"
 	"reflect"
 	"strconv"
 	"strings"
 	"time"
-
-	"net/http"
 
 	"github.com/astaxie/beego"
 )
@@ -202,7 +201,8 @@ func Date(format string) string {
 }
 
 /**
- */
+获取URL路径
+*/
 func CurrentPath(request *http.Request) string {
 	return request.URL.Path
 }

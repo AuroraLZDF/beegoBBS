@@ -11,13 +11,13 @@ type TopicController struct {
 
 func (this *TopicController) Index() {
 	id, _ := this.GetInt("id")
-	category, _ := this.GetInt("category")
+	categoryID, _ := this.GetInt("category_id")
 	page, _ := this.GetInt("page")
 	order := this.GetString("order")
 
 	where := map[string]interface{}{
 		"id":          id,
-		"category":    category,
+		"category":    categoryID,
 		"order":       order,
 		"page":        page,
 		"currentPath": utils.CurrentPath(this.Ctx.Request),
@@ -96,7 +96,7 @@ func (this *TopicController) Save() {
 		return
 	}
 
-	data["url"] = "/topics/recent"
+	data["url"] = "/topics?order=recent"
 	this.JsonMessage(1, "话题创建成功", data)
 }
 

@@ -7064,3 +7064,23 @@ button.close {
 .footer .container a {
     color: inherit;
 }
+
+.pagination > .active > a, .pagination > .active > a:hover, .pagination > .active > a:focus, .pagination > .active > span, .pagination > .active > span:hover, .pagination > .active > span:focus {
+    z-index: 3;
+    color: #fff;
+    background-color: #3097D1;
+    border-color: #3097D1;
+    cursor: default;
+}
+
+.pagination > li > a, .pagination > li > span {
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    line-height: 1.6;
+    text-decoration: none;
+    color: #3097D1;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    margin-left: -1px;
+}

@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/auroraLZDF/beegoBBS/utils"
@@ -73,53 +74,43 @@ func (Topics) TopicLists(params map[string]interface{}) (map[string]interface{},
 	db := DB()
 	defer db.Close()
 
+	var limit = 5
+	var count int64
+	var topics []Topics
+
 	var page = params["page"].(int)
 	if page <= 1 {
 		page = 1
 	}
 
-	limit := 10
-
-	_db := db.Where("status = ?", STATUS_ON)
-	//var where = " t.status=" + utils.IntToString(STATUS_ON)
+	db.Where("status = ?", STATUS_ON)
 
 	id := params["id"].(int)
 	if id > 0 {
-		_db = _db.Where("id = ?", id)
-		//where = where + " and t.id=" + utils.IntToString(id)
+		db = db.Where("id = ?", id)
 	}
 
 	category := params["category"].(int)
 	if category > 0 {
-		_db = _db.Where("category_id = ?", category)
-		//where = where + " and t.category_id=?" + utils.IntToString(category)
+		db = db.Where("category_id = ?", category)
 	}
+
+	// 获取记录个数
+	db.Model(topics).Count(&count)
 
 	order := params["order"]
-	if order == "default" {
-		_db.Order("updated_at desc, order asc, reply_count desc")
-		//where = where + " order by t.updated_at desc, t.order asc, t.reply_count desc"
-	} else if order == "recent" {
-		_db.Order("created_at desc, order asc, reply_count desc")
-		//where = where + " order by t.created_at desc, t.order asc, t.reply_count desc"
+	if order == "recent" {
+		db = db.Order("created_at desc")
+	} else {
+		db = db.Order("updated_at desc")
 	}
 
-	_limit := utils.IntToString(page-1) + "," + utils.IntToString(limit)
-	_db.Limit(_limit)
-	//where = where + " limit " + utils.IntToString(page-1) + ", " + utils.IntToString(limit)
+	db = db.Limit(limit).Offset((page - 1) * limit)
 
-	//topic := []Topics{}
-	//result := _db.Find(&topic)
-	//sql := "select t.*,u.name as username,u.avatar,c.name as category_name from bbs_topics t left join bbs_users u on t.user_id=u.id left join bbs_categories c on c.id=t.category_id where " + where
-	//result, err := utils.GetAll(sql)
-	var count int64
-	var topics []Topics
-	var m = make(map[string]interface{})
-
-	_db.Find(&topics)
-	result := db.Preload("Category").Preload("User").Find(&topics).Count(&count)
+	// 获取记录数据
+	result := db.Model(topics).Preload("Category").Preload("User").Find(&topics)
 	if err := result.Error; err != nil {
-		return m, err
+		fmt.Println(err)
 	}
 
 	pageNate := utils.Paginator(page, limit, count, params["currentPath"].(string))

@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"math"
 )
 
@@ -12,13 +13,13 @@ import (
 * currentPath	url
  */
 func Paginator(page, prepage int, nums int64, currentPath string) string {
+	fmt.Println("page:", page, " | prepage:", prepage, " | num", nums, " currentPath | ", currentPath)
 	var firstpage int //前一页地址
 	var lastpage int  //后一页地址
 
 	//根据nums总数，和prepage每页数量 生成分页总数
 	totalpages := int(math.Ceil(float64(nums) / float64(prepage))) //page总数
 	if page > totalpages {
-
 		page = totalpages
 	}
 
@@ -47,6 +48,7 @@ func Paginator(page, prepage int, nums int64, currentPath string) string {
 		lastpage = page + 1
 	default:
 		pages = make([]int, int(math.Min(5, float64(totalpages))))
+		fmt.Println(pages)
 		for i, _ := range pages {
 			pages[i] = i + 1
 		}
@@ -68,26 +70,28 @@ func Paginator(page, prepage int, nums int64, currentPath string) string {
 * url	URL
  */
 func Default(pages []int, firstpage int, lastpage int, currentPage int, url string) string {
-
-	var disabled = ""
-	var disabled2 = ""
+	var html = "<nav aria-label='Page navigation'><ul class='pagination'>"
 	if currentPage == firstpage {
-		disabled = "disabled"
+		html = html + "<li class='disabled'><span aria-hidden='true'>&laquo;</span></li>"
+	} else {
+		html = html + "<li><a href='" + url + "?page=" + IntToString(firstpage) + "' aria-label='Previous'><span aria-hidden='true'>&laquo;</span></a></li>"
 	}
 
-	if currentPage == lastpage {
-		disabled2 = "disabled"
-	}
-
-	var html = "<nav aria-label='Page navigation'><ul class='pagination'><li class='" + disabled + "'><a href='" + url + "?page=" + IntToString(firstpage) + "' aria-label='Previous'><span aria-hidden='true'>&laquo;</span></a></li>"
 	for _, page := range pages {
-		html = html + "<li><a href='" + url + "?page=" + IntToString(page) + "'"
 		if currentPage == page {
-			html = html + " class='active'>" + IntToString(page) + "</a></li>"
+			html = html + "<li class='active'><span>" + IntToString(page) + "</span></li>"
+		} else {
+			html = html + "<li><a href='" + url + "?page=" + IntToString(page) + "'" + ">" + IntToString(page) + "</a></li>"
 		}
 	}
 
-	html = html + "<li class='" + disabled2 + "'><a href='" + url + "?page=" + IntToString(lastpage) + "' aria-label='Next'><span aria-hidden='true'>&raquo;</span></a></li></ul></nav>"
+	if currentPage >= lastpage {
+		html = html + "<li class='disabled'><span aria-hidden='true'>&raquo;</span></li>"
+	} else {
+		html = html + "<li><a href='" + url + "?page=" + IntToString(lastpage) + "' aria-label='Next'><span aria-hidden='true'>&raquo;</span></a></li>"
+	}
+
+	html = html + "</ul></nav>"
 
 	return html
 }
