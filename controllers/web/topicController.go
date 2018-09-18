@@ -29,7 +29,6 @@ func (this *TopicController) Index() {
 	if err != nil {
 		this.Error404("话题列表加载失败")
 	}
-	fmt.Println(result["topics"])
 
 	this.Data["order"] = order
 	this.Data["topics"] = result["topics"]

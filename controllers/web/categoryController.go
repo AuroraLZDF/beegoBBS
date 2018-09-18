@@ -9,7 +9,9 @@ type CategoryController struct {
 	Controller
 }
 
+//
 func (this *CategoryController) Show() {
+	id, _ := this.GetInt("id")
 	page, _ := this.GetInt("page")
 	category_id := this.Ctx.Input.Param(":id")
 
@@ -20,6 +22,7 @@ func (this *CategoryController) Show() {
 
 	var order = "recent"
 	where := map[string]interface{}{
+		"id":          id,
 		"category":    utils.StringToInt(category_id),
 		"page":        page,
 		"order":       order,

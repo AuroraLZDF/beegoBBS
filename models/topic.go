@@ -89,11 +89,11 @@ func (Topics) TopicLists(params map[string]interface{}) (map[string]interface{},
 
 	db.Where("status = ?", STATUS_ON)
 
-	if params["id"] != nil {
+	if params["id"].(int) > 0 {
 		db = db.Where("id = ?", params["id"].(int))
 	}
 
-	if params["category"] != nil {
+	if params["category"].(int) > 0 {
 		db = db.Where("category_id = ?", params["category"].(int))
 	}
 
@@ -102,7 +102,7 @@ func (Topics) TopicLists(params map[string]interface{}) (map[string]interface{},
 	fmt.Println("count:", count)
 
 	var order = ""
-	if params["order"] != nil {
+	if params["order"] != "" {
 		order = params["order"].(string)
 	}
 
