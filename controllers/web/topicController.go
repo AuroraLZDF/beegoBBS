@@ -31,6 +31,7 @@ func (this *TopicController) Index() {
 	}
 
 	this.Data["order"] = order
+	this.Data["category_active"] = categoryID
 	this.Data["topics"] = result["topics"]
 	this.Data["pageNate"] = result["pageNate"]
 	this.TplName = "web/topic/index.html"
@@ -47,10 +48,24 @@ func (this *TopicController) Show() {
 		this.Error404(err.Error())
 	}
 
+	// 判断话题作者是否是当前登录用户
 	var me = true
 	if err := this.CheckMe(result.UserId); err != nil {
 		me = false
 	}
+
+	// 判断当前登录用户是否有删除评论权限
+	/*
+		var isAuthor = make(map[int]bool)
+		for i, reply := range result.Reply {
+			var ok = true
+			if err := this.CheckMe(reply.UserId); err != nil {
+				ok = false
+			}
+			isAuthor[i] = ok
+		}
+		this.Data["isAuthor"] = isAuthor
+	*/
 
 	this.Data["topic"] = result
 	this.Data["CheckMe"] = me

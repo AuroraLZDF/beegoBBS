@@ -1,0 +1,39 @@
+<div class="reply-list">
+    {{{ range $index, $reply := .topic.Reply }}}
+        <div class=" media"  name="reply{{{ $reply.Id }}}" id="reply{{{ $reply.Id }}}">
+            <div class="avatar pull-left">
+                <a href="/user/{{{ $reply.UserId }}}">
+                    <img class="media-object img-thumbnail" alt="{{{ $.topic.User.Name }}}" src="{{{ $.topic.User.Avatar }}}"  style="width:48px;height:48px;"/>
+                </a>
+            </div>
+
+            <div class="infos">
+                <div class="media-heading">
+                    <a href="/user/{{{ $reply.UserId }}}" title="{{{ $.topic.User.Name }}}">
+                        {{{ $.topic.User.Name }}}
+                    </a>
+                    <span> •  </span>
+                    <span class="meta" title="{{{ $reply.CreatedAt }}}">{{{ date $reply.CreatedAt "Y-m-d H:i:s" }}}</span>
+
+                    <!-- 回复删除按钮 -->
+
+                    {{{ if $.CheckMe }}}
+                    <span class="meta pull-right">
+                        <form action="/replies/destroy/{{{ $reply.Id }}}" method="post" class="formAjax">
+                                {{{ $.xsrf_html }}}
+                            <input type="hidden" name="topic_id" value="{{{ $reply.TopicId }}}">
+                            <button type="submit" class="btn btn-default btn-xs pull-left">
+                                <i class="glyphicon glyphicon-trash"></i>
+                            </button>
+                        </form>
+                    </span>
+                    {{{ end }}}
+                </div>
+                <div class="reply-content">
+                    {{{ str2html $reply.Content }}}
+                </div>
+            </div>
+        </div>
+        <hr>
+    {{{ end }}}
+</div>

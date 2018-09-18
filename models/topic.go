@@ -25,6 +25,7 @@ type Topics struct {
 
 	Category Categories `gorm:"foreignkey:CategoryId"`
 	User     Users      `gorm:"foreignkey:UserId"`
+	Reply    []Replies  `gorm:"foreignkey:TopicId;association_foreignkey:Id"`
 }
 
 const (
@@ -135,7 +136,7 @@ func (Topics) TopicByID(id int) (*Topics, error) {
 
 	var topic Topics
 
-	result := db.Where("id=?", id).Preload("Category").Preload("User").First(&topic)
+	result := db.Where("id=?", id).Preload("Category").Preload("User").Preload("Reply").First(&topic)
 	if err := result.Error; err != nil {
 		return &topic, err
 	}

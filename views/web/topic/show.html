@@ -40,7 +40,7 @@
                         {{{ str2html .topic.Body}}}
                     </div>
 
-                    {{{if eq .CheckMe true }}}                   
+                    {{{if .CheckMe }}}                   
                         <div class="operate">
                             <hr>
                             <a href="/topics/edit/{{{ .topic.Id }}}" class="btn btn-default btn-xs pull-left" role="button">
@@ -64,8 +64,8 @@
            
             <div class="panel panel-default topic-reply">
                 <div class="panel-body">
-                    @includeWhen(auth('bbs')->check(), 'bbs.topics._reply_box', ['topic' => $topic])
-                    @include('bbs.topics._reply_list', ['replies' => $topic->replies()->with('user')->get()])
+                    {{{ template "web/topic/_reply_box.html" .}}}
+                    {{{ template "web/topic/_reply_list.html" .}}}
                 </div>
             </div>
         </div>

@@ -49,4 +49,7 @@ func init() {
 	beego.Router("/topics/edit/:id", &web.TopicController{}, "get:Edit")
 	beego.Router("/topics/update", &web.TopicController{}, "post:Update")
 	beego.Router("/topics/destroy", &web.TopicController{}, "post:Destroy")
+	// 回复/留言
+	beego.Router("/replies/store/:id", &web.ReplyController{}, "post:Store")
+	beego.Router("/replies/destroy/:id", &web.ReplyController{}, "post:Destroy")
 }

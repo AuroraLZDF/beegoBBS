@@ -7,4 +7,5 @@ import (
 
 func AddFunc() {
 	beego.AddFuncMap("config", utils.Configs)
+	beego.AddFuncMap("authCheck", utils.AuthCheck)
 }

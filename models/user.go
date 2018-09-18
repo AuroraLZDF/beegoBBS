@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/auroraLZDF/beegoBBS/utils"
-	_ "github.com/auroraLZDF/beegoBBS/utils"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -20,9 +19,10 @@ type Users struct {
 	CreatedAt         time.Time
 	UpdatedAt         time.Time
 	LastActivedAt     time.Time
+	Repy              []Replies
 }
 
-// 设置User的表名为`profiles`
+// 设置User的表名为`bbs_users`
 func (Users) TableName() string {
 	return "bbs_users"
 }

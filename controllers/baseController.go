@@ -20,6 +20,7 @@ func (this *BaseController) Prepare() {
 	this.XSRFExpire = 7200
 	this.Data["xsrf_html"] = template.HTML(this.XSRFFormHTML())
 	this.Data["xsrf_token"] = this.XSRFToken()
+	this.Data["category_active"] = 0
 
 	if res := this.CheckCk(); res != nil {
 		this.Data["uInfo"] = res

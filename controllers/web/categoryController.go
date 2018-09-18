@@ -36,6 +36,7 @@ func (this *CategoryController) Show() {
 	}
 
 	this.Data["order"] = order
+	this.Data["category_active"] = utils.StringToInt(category_id)
 	this.Data["topics"] = result["topics"]
 	this.Data["pageNate"] = result["pageNate"]
 	this.TplName = "web/topic/index.html"

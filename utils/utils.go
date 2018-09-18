@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"context"
 	"crypto/md5"
 	"encoding/base64"
 	"encoding/hex"
@@ -16,6 +17,7 @@ import (
 	"time"
 
 	"github.com/astaxie/beego"
+	"github.com/go-session/session"
 )
 
 var cfg = beego.AppConfig
@@ -205,4 +207,30 @@ func Date(format string) string {
 */
 func CurrentPath(request *http.Request) string {
 	return request.URL.Path
+}
+
+func AuthCheck(w http.ResponseWriter, r *http.Request, id int) bool {
+	store, err := session.Start(context.Background(), w, r)
+	if err != nil {
+		fmt.Println(w, err)
+		return false
+	}
+
+	uInfo, ok := store.Get("uInfo")
+	if !ok {
+		return false
+	}
+
+	if uInfo != nil && uInfo != "" {
+		js := AuthCode(uInfo.(string), "DECODE")
+		uMap := JsonToMap(js)
+
+		_id := FloatToInt(uMap["id"].(float64))
+
+		if _id != id {
+			return false
+		}
+	}
+
+	return true
 }
