@@ -6,10 +6,6 @@ import (
 	"github.com/astaxie/beego"
 )
 
-/*func init() {
-
-}*/
-
 func main() {
 	beego.Run()
 }

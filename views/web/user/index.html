@@ -19,7 +19,7 @@
         <p>{{{ .user.Introduction }}}</p>
         <hr>
         <h4><strong>注册于</strong></h4>
-        <p>{{{ .user.CreatedAt }}}</p>
+        <p>{{{ date .user.CreatedAt "Y-m-d H:i:s" }}}</p>
     </div>
 </div>
 </div>

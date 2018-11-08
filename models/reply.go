@@ -28,12 +28,12 @@ func (Replies) AddReply(r Replies) error {
 	return nil
 }
 
-func (Replies) Delete(id int, topic_id int) error {
+func (Replies) Delete(id int, topicId int) error {
 	db := DB()
 	defer db.Close()
 
 	var reply Replies
-	db = db.Where("id=? and topic_id=?", id, topic_id)
+	db = db.Where("id=? and topic_id=?", id, topicId)
 	if err := db.First(&reply).Error; err != nil {
 		return err
 	}
