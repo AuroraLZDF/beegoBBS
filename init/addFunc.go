@@ -1,7 +1,7 @@
 package init
 
 import (
-	"github.com/auroraLZDF/beegoBBS/utils"
+	"auroraLZDF/beegoBBS/utils"
 	"github.com/astaxie/beego"
 )
 

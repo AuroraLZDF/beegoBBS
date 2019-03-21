@@ -1,8 +1,8 @@
 package auth
 
 import (
-	"github.com/auroraLZDF/beegoBBS/models"
-	"github.com/auroraLZDF/beegoBBS/utils"
+	"auroraLZDF/beegoBBS/models"
+	"auroraLZDF/beegoBBS/utils"
 	"github.com/astaxie/beego"
 )
 

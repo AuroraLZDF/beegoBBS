@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/auroraLZDF/beegoBBS/utils"
+	"auroraLZDF/beegoBBS/utils"
 )
 
 type Topics struct {

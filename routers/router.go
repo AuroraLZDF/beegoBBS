@@ -2,9 +2,9 @@ package routers
 
 import (
 	"github.com/astaxie/beego"
-	"github.com/auroraLZDF/beegoBBS/controllers/auth"
-	"github.com/auroraLZDF/beegoBBS/controllers/upload"
-	"github.com/auroraLZDF/beegoBBS/controllers/web"
+	"auroraLZDF/beegoBBS/controllers/auth"
+	"auroraLZDF/beegoBBS/controllers/upload"
+	"auroraLZDF/beegoBBS/controllers/web"
 	"github.com/dchest/captcha"
 )
 

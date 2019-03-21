@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/astaxie/beego"
-	"github.com/auroraLZDF/beegoBBS/models"
-	"github.com/auroraLZDF/beegoBBS/utils"
+	"auroraLZDF/beegoBBS/models"
+	"auroraLZDF/beegoBBS/utils"
 )
 
 type BaseController struct {

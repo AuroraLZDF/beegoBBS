@@ -4,8 +4,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/auroraLZDF/beegoBBS/models"
-	"github.com/auroraLZDF/beegoBBS/utils"
+	"auroraLZDF/beegoBBS/models"
+	"auroraLZDF/beegoBBS/utils"
 )
 
 type UserController struct {

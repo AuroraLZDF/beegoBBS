@@ -2,7 +2,7 @@ package upload
 
 import (
 	"fmt"
-	"github.com/auroraLZDF/beegoBBS/utils"
+	"auroraLZDF/beegoBBS/utils"
 	"os"
 )
 

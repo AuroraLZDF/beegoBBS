@@ -1,6 +1,6 @@
 package auth
 
-import "github.com/auroraLZDF/beegoBBS/controllers"
+import "auroraLZDF/beegoBBS/controllers"
 
 type Controller struct {
 	controllers.BaseController

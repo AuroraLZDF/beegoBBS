@@ -1,4 +1,4 @@
-package test
+package main
 
 import (
 	"net/http"
@@ -6,7 +6,7 @@ import (
 	"testing"
 	"runtime"
 	"path/filepath"
-	_ "github.com/auroraLZDF/beegoBBS/routers"
+	_ "auroraLZDF/beegoBBS/routers"
 
 	"github.com/astaxie/beego"
 	. "github.com/smartystreets/goconvey/convey"

@@ -3,7 +3,7 @@ package models
 import (
 	"time"
 
-	"github.com/auroraLZDF/beegoBBS/utils"
+	"auroraLZDF/beegoBBS/utils"
 )
 
 type Categories struct {

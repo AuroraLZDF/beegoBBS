@@ -3,8 +3,8 @@ package web
 import (
 	"html/template"
 
-	"github.com/auroraLZDF/beegoBBS/controllers"
-	"github.com/auroraLZDF/beegoBBS/utils"
+	"auroraLZDF/beegoBBS/controllers"
+	"auroraLZDF/beegoBBS/utils"
 )
 
 type Controller struct {

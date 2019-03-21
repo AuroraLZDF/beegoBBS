@@ -1,8 +1,8 @@
 package auth
 
 import (
-	"github.com/auroraLZDF/beegoBBS/utils"
-	"github.com/auroraLZDF/beegoBBS/models"
+	"auroraLZDF/beegoBBS/utils"
+	"auroraLZDF/beegoBBS/models"
 	"github.com/dchest/captcha"
 )
 
